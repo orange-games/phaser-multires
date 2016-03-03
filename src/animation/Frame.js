@@ -140,7 +140,6 @@ Phaser.Frame.prototype = {
     * @param {integer} height - The new height of the Frame.
     */
     resize: function (width, height) {
-        console.log('frame resize called', width, height)
         this.width = width;
         this.height = height;
         this.centerX = Math.floor(width / 2);
