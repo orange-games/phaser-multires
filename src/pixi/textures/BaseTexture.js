@@ -14,17 +14,20 @@ PIXI.BaseTextureCacheIdGenerator = 0;
  * @constructor
  * @param source {String} the source object (image or canvas)
  * @param scaleMode {Number} See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values
+ * @param resolution {number} the resolution of the texture for devices with different pixel ratios
  */
-PIXI.BaseTexture = function(source, scaleMode)
+PIXI.BaseTexture = function(source, scaleMode, resolution)
 {
     /**
-     * The Resolution of the texture. 
+     * The Resolution of the texture.
      *
      * @property resolution
      * @type Number
      */
     this.resolution = 1;
-    
+
+    this.realResolution = resolution || 1;
+
     /**
      * [read-only] The width of the base texture set when the image has loaded
      *
@@ -44,8 +47,24 @@ PIXI.BaseTexture = function(source, scaleMode)
     this.height = 100;
 
     /**
+     * Used to store the actual width of the source of this texture
+     *
+     * @member {number}
+     * @readOnly
+     */
+    this.realWidth = 100;
+
+    /**
+     * Used to store the actual height of the source of this texture
+     *
+     * @member {number}
+     * @readOnly
+     */
+    this.realHeight = 100;
+
+    /**
      * The scale mode to apply when scaling this texture
-     * 
+     *
      * @property scaleMode
      * @type {Number}
      * @default PIXI.scaleModes.LINEAR
@@ -92,7 +111,7 @@ PIXI.BaseTexture = function(source, scaleMode)
     /**
      * Set this to true if a mipmap of this texture needs to be generated. This value needs to be set before the texture is used
      * Also the texture must be a power of two size to work
-     * 
+     *
      * @property mipmap
      * @type {Boolean}
      */
@@ -113,17 +132,22 @@ PIXI.BaseTexture = function(source, scaleMode)
     if ((this.source.complete || this.source.getContext) && this.source.width && this.source.height)
     {
         this.hasLoaded = true;
-        this.width = this.source.naturalWidth || this.source.width;
-        this.height = this.source.naturalHeight || this.source.height;
+
+        this.realWidth = this.source.naturalWidth || this.source.width;
+        this.realHeight = this.source.naturalHeight || this.source.height;
+
+        this.width = this.realWidth / this.realResolution;
+        this.height = this.realHeight / this.realResolution;
+
         this.dirty();
     }
 
     /**
      * A BaseTexture can be set to skip the rendering phase in the WebGL Sprite Batch.
-     * 
+     *
      * You may want to do this if you have a parent Sprite with no visible texture (i.e. uses the internal `__default` texture)
      * that has children that you do want to render, without causing a batch flush in the process.
-     * 
+     *
      * @property skipRender
      * @type Boolean
      */
@@ -241,7 +265,7 @@ PIXI.BaseTexture.prototype.unloadFromGPU = function()
         {
             gl.deleteTexture(glTexture);
         }
-        
+
     }
 
     this._glTextures.length = 0;
@@ -260,7 +284,7 @@ PIXI.BaseTexture.prototype.unloadFromGPU = function()
  * @param scaleMode {Number} See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values
  * @return {BaseTexture}
  */
-PIXI.BaseTexture.fromImage = function(imageUrl, crossorigin, scaleMode)
+PIXI.BaseTexture.fromImage = function(imageUrl, crossorigin, scaleMode, resolution)
 {
     var baseTexture = PIXI.BaseTextureCache[imageUrl];
 
@@ -278,7 +302,7 @@ PIXI.BaseTexture.fromImage = function(imageUrl, crossorigin, scaleMode)
         }
 
         image.src = imageUrl;
-        baseTexture = new PIXI.BaseTexture(image, scaleMode);
+        baseTexture = new PIXI.BaseTexture(image, scaleMode, resolution);
         baseTexture.imageUrl = imageUrl;
         PIXI.BaseTextureCache[imageUrl] = baseTexture;
 

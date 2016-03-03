@@ -240,7 +240,7 @@ PIXI.Sprite.prototype.getBounds = function(matrix)
             a *= -1;
             var temp = w0;
             w0 = -w1;
-            w1 = -temp; 
+            w1 = -temp;
         }
 
         if (d < 0)
@@ -248,11 +248,11 @@ PIXI.Sprite.prototype.getBounds = function(matrix)
             d *= -1;
             var temp = h0;
             h0 = -h1;
-            h1 = -temp; 
+            h1 = -temp;
         }
 
         // this means there is no rotation going on right? RIGHT?
-        // if thats the case then we can avoid checking the bound values! yay         
+        // if thats the case then we can avoid checking the bound values! yay
         minX = a * w1 + tx;
         maxX = a * w0 + tx;
         minY = d * h1 + ty;
