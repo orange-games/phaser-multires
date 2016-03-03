@@ -16,7 +16,8 @@
 * @param {number} height - Height of the frame within the texture image.
 * @param {string} name - The name of the frame. In Texture Atlas data this is usually set to the filename.
 */
-Phaser.Frame = function (index, x, y, width, height, name) {
+Phaser.Frame = function (index, x, y, width, height,name, resolution) {
+    resolution = resolution || 1;
 
     /**
     * @property {number} index - The index of this Frame within the FrameData set it is being added to.
@@ -26,42 +27,44 @@ Phaser.Frame = function (index, x, y, width, height, name) {
     /**
     * @property {number} x - X position within the image to cut from.
     */
-    this.x = x;
+    this.x = x / resolution;
 
     /**
     * @property {number} y - Y position within the image to cut from.
     */
-    this.y = y;
+    this.y = y / resolution;
 
     /**
     * @property {number} width - Width of the frame.
     */
-    this.width = width;
+    this.width = width / resolution;
 
     /**
     * @property {number} height - Height of the frame.
     */
-    this.height = height;
+    this.height = height / resolution;
 
     /**
     * @property {string} name - Useful for Texture Atlas files (is set to the filename value).
     */
     this.name = name;
 
+    this.resolution = resolution;
+
     /**
     * @property {number} centerX - Center X position within the image to cut from.
     */
-    this.centerX = Math.floor(width / 2);
+    this.centerX = Math.floor(width / resolution / 2);
 
     /**
     * @property {number} centerY - Center Y position within the image to cut from.
     */
-    this.centerY = Math.floor(height / 2);
+    this.centerY = Math.floor(height / resolution / 2);
 
     /**
     * @property {number} distance - The distance from the top left to the bottom-right of this Frame.
     */
-    this.distance = Phaser.Math.distance(0, 0, width, height);
+    this.distance = Phaser.Math.distance(0, 0, width / resolution, height / resolution);
 
     /**
     * @property {boolean} rotated - Rotated? (not yet implemented)
@@ -137,7 +140,7 @@ Phaser.Frame.prototype = {
     * @param {integer} height - The new height of the Frame.
     */
     resize: function (width, height) {
-
+        console.log('frame resize called', width, height)
         this.width = width;
         this.height = height;
         this.centerX = Math.floor(width / 2);
@@ -149,7 +152,6 @@ Phaser.Frame.prototype = {
         this.bottom = this.y + height;
 
     },
-
     /**
     * If the frame was trimmed when added to the Texture Atlas this records the trim and source data.
     *
@@ -168,14 +170,14 @@ Phaser.Frame.prototype = {
 
         if (trimmed)
         {
-            this.sourceSizeW = actualWidth;
-            this.sourceSizeH = actualHeight;
-            this.centerX = Math.floor(actualWidth / 2);
-            this.centerY = Math.floor(actualHeight / 2);
-            this.spriteSourceSizeX = destX;
-            this.spriteSourceSizeY = destY;
-            this.spriteSourceSizeW = destWidth;
-            this.spriteSourceSizeH = destHeight;
+            this.sourceSizeW = actualWidth / this.resolution;
+            this.sourceSizeH = actualHeight / this.resolution;
+            this.centerX = Math.floor(actualWidth / this.resolution / 2);
+            this.centerY = Math.floor(actualHeight / this.resolution / 2);
+            this.spriteSourceSizeX = destX / this.resolution;
+            this.spriteSourceSizeY = destY / this.resolution;
+            this.spriteSourceSizeW = destWidth / this.resolution;
+            this.spriteSourceSizeH = destHeight / this.resolution;
         }
 
     },

@@ -1,7 +1,7 @@
 /**
  * @author Mat Groves http://matgroves.com/ @Doormat23
  */
- 
+
 /**
  * Converts a hex color number to an [R, G, B] array
  *
@@ -85,10 +85,29 @@ PIXI.getNextPowerOfTwo = function(number)
  * @method isPowerOfTwo
  * @param width {Number}
  * @param height {Number}
- * @return {Boolean} 
+ * @return {Boolean}
  */
 PIXI.isPowerOfTwo = function(width, height)
 {
     return (width > 0 && (width & (width - 1)) === 0 && height > 0 && (height & (height - 1)) === 0);
 
+};
+
+/**
+ * get the resolution of an asset by looking for the prefix
+ * used by spritesheets and image urls
+ *
+ * @param url {string} the image path
+ * @return {number}
+ */
+PIXI.getResolutionOfUrl = function (url)
+{
+    var resolution = /@(.+)x/.exec(url);
+
+    if (resolution)
+    {
+        return parseFloat(resolution[1]);
+    }
+
+    return 1;
 };
