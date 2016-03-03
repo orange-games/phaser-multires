@@ -631,8 +631,6 @@ Phaser.Cache.prototype = {
             }
         }
 
-        console.log('texture:', obj)
-
         this._cache.image[key] = obj;
 
         this._resolveURL(url, obj);
