@@ -812,8 +812,9 @@ Phaser.InputHandler.prototype = {
             this._dx = x;
             this._dy = y;
 
+            var resolution = this.sprite.texture.baseTexture.realResolution;
             this.game.input.hitContext.clearRect(0, 0, 1, 1);
-            this.game.input.hitContext.drawImage(this.sprite.texture.baseTexture.source, x, y, 1, 1, 0, 0, 1, 1);
+            this.game.input.hitContext.drawImage(this.sprite.texture.baseTexture.source, x * resolution, y * resolution, 1, 1, 0, 0, 1, 1);
 
             var rgb = this.game.input.hitContext.getImageData(0, 0, 1, 1);
 
@@ -829,7 +830,7 @@ Phaser.InputHandler.prototype = {
 
     /**
     * Update.
-    * 
+    *
     * @method Phaser.InputHandler#update
     * @protected
     * @param {Phaser.Pointer} pointer
@@ -870,7 +871,7 @@ Phaser.InputHandler.prototype = {
 
     /**
     * Internal method handling the pointer over event.
-    * 
+    *
     * @method Phaser.InputHandler#_pointerOverHandler
     * @private
     * @param {Phaser.Pointer} pointer - The pointer that triggered the event
@@ -911,7 +912,7 @@ Phaser.InputHandler.prototype = {
 
     /**
     * Internal method handling the pointer out event.
-    * 
+    *
     * @method Phaser.InputHandler#_pointerOutHandler
     * @private
     * @param {Phaser.Pointer} pointer - The pointer that triggered the event.
@@ -945,7 +946,7 @@ Phaser.InputHandler.prototype = {
 
     /**
     * Internal method handling the touched / clicked event.
-    * 
+    *
     * @method Phaser.InputHandler#_touchedHandler
     * @private
     * @param {Phaser.Pointer} pointer - The pointer that triggered the event.
@@ -1036,7 +1037,7 @@ Phaser.InputHandler.prototype = {
                     isOver = this.checkPointerOver(pointer);
                 }
             }
-            
+
             data.isOver = isOver;
 
             if (!isOver && this.useHandCursor)
@@ -1259,12 +1260,12 @@ Phaser.InputHandler.prototype = {
     * Allow this Sprite to be dragged by any valid pointer.
     *
     * When the drag begins the Sprite.events.onDragStart event will be dispatched.
-    * 
+    *
     * When the drag completes by way of the user letting go of the pointer that was dragging the sprite, the Sprite.events.onDragStop event is dispatched.
     *
     * For the duration of the drag the Sprite.events.onDragUpdate event is dispatched. This event is only dispatched when the pointer actually
     * changes position and moves. The event sends 5 parameters: `sprite`, `pointer`, `dragX`, `dragY` and `snapPoint`.
-    * 
+    *
     * @method Phaser.InputHandler#enableDrag
     * @param {boolean} [lockCenter=false] - If false the Sprite will drag from where you click it minus the dragOffset. If true it will center itself to the tip of the mouse pointer.
     * @param {boolean} [bringToTop=false] - If true the Sprite will be bought to the top of the rendering list in its current Group.
