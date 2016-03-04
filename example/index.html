@@ -35,17 +35,26 @@
         var img = null, btn = null;
 
         function preload() {
-            var scale = '0.5';
-
-            game.load.image('bg', 'images/bg@' + scale + 'x.png');
-            game.load.atlas('atlas', 'atlas/atlas@' + scale + 'x.png', 'atlas/atlas@' + scale + 'x.json');
+            game.load.image('bg', 'images/bg@1x.png');
+            game.load.atlas('atlas1', 'atlas/atlas@1x.png', 'atlas/atlas@1x.json');
+            game.load.atlas('atlas2', 'atlas/atlas@0.5x.png', 'atlas/atlas@0.5x.json');
         }
 
         function create(){
             //let's add a nice background
             img = game.add.image(0, 0, 'bg');
-            btn = game.add.image(game.width / 2, game.height / 2, 'atlas', 'btn_01.png');
-            btn.anchor.set(0.5);
+
+            btn1 = game.add.image(game.width / 2, game.height / 2 - 75, 'atlas1', 'btn_01.png');
+            btn1.inputEnabled = true;
+            btn1.input.useHandCursor = true;
+            btn1.input.pixelPerfectOver = true;
+            btn1.anchor.set(0.5);
+
+            btn2 = game.add.image(game.width / 2, game.height / 2 + 75, 'atlas2', 'btn_01.png');
+            btn2.inputEnabled = true;
+            btn2.input.useHandCursor = true;
+            btn2.input.pixelPerfectOver = true;
+            btn2.anchor.set(0.5);
         }
     </script>
 </head>
