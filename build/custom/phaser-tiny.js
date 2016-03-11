@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.4.6-alpha3 "Baerlon" - Built: Fri Mar 11 2016 10:07:52
+* v2.4.6-alpha4 "Baerlon" - Built: Fri Mar 11 2016 10:14:10
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
