@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.4.8 "Watch Hill" - Built: Thu May 19 2016 12:22:51
+* v2.4.8 "Watch Hill" - Built: Mon May 23 2016 14:35:14
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -17975,8 +17975,9 @@ Phaser.InputHandler.prototype = {
             this._dx = x;
             this._dy = y;
 
+            var resolution = this.sprite.texture.baseTexture.realResolution;
             this.game.input.hitContext.clearRect(0, 0, 1, 1);
-            this.game.input.hitContext.drawImage(this.sprite.texture.baseTexture.source, x, y, 1, 1, 0, 0, 1, 1);
+            this.game.input.hitContext.drawImage(this.sprite.texture.baseTexture.source, x * resolution, y * resolution, 1, 1, 0, 0, 1, 1);
 
             var rgb = this.game.input.hitContext.getImageData(0, 0, 1, 1);
 
@@ -17992,7 +17993,7 @@ Phaser.InputHandler.prototype = {
 
     /**
     * Update.
-    * 
+    *
     * @method Phaser.InputHandler#update
     * @protected
     * @param {Phaser.Pointer} pointer
@@ -18033,7 +18034,7 @@ Phaser.InputHandler.prototype = {
 
     /**
     * Internal method handling the pointer over event.
-    * 
+    *
     * @method Phaser.InputHandler#_pointerOverHandler
     * @private
     * @param {Phaser.Pointer} pointer - The pointer that triggered the event
@@ -18074,7 +18075,7 @@ Phaser.InputHandler.prototype = {
 
     /**
     * Internal method handling the pointer out event.
-    * 
+    *
     * @method Phaser.InputHandler#_pointerOutHandler
     * @private
     * @param {Phaser.Pointer} pointer - The pointer that triggered the event.
@@ -18108,7 +18109,7 @@ Phaser.InputHandler.prototype = {
 
     /**
     * Internal method handling the touched / clicked event.
-    * 
+    *
     * @method Phaser.InputHandler#_touchedHandler
     * @private
     * @param {Phaser.Pointer} pointer - The pointer that triggered the event.
@@ -18199,7 +18200,7 @@ Phaser.InputHandler.prototype = {
                     isOver = this.checkPointerOver(pointer);
                 }
             }
-            
+
             data.isOver = isOver;
 
             if (!isOver && this.useHandCursor)
@@ -18422,12 +18423,12 @@ Phaser.InputHandler.prototype = {
     * Allow this Sprite to be dragged by any valid pointer.
     *
     * When the drag begins the Sprite.events.onDragStart event will be dispatched.
-    * 
+    *
     * When the drag completes by way of the user letting go of the pointer that was dragging the sprite, the Sprite.events.onDragStop event is dispatched.
     *
     * For the duration of the drag the Sprite.events.onDragUpdate event is dispatched. This event is only dispatched when the pointer actually
     * changes position and moves. The event sends 5 parameters: `sprite`, `pointer`, `dragX`, `dragY` and `snapPoint`.
-    * 
+    *
     * @method Phaser.InputHandler#enableDrag
     * @param {boolean} [lockCenter=false] - If false the Sprite will drag from where you click it minus the dragOffset. If true it will center itself to the tip of the mouse pointer.
     * @param {boolean} [bringToTop=false] - If true the Sprite will be bought to the top of the rendering list in its current Group.
@@ -25652,7 +25653,7 @@ Phaser.SpriteBatch.prototype.constructor = Phaser.SpriteBatch;
 
 /**
 * A BitmapData object contains a Canvas element to which you can draw anything you like via normal Canvas context operations.
-* A single BitmapData can be used as the texture for one or many Images / Sprites. 
+* A single BitmapData can be used as the texture for one or many Images / Sprites.
 * So if you need to dynamically create a Sprite texture then they are a good choice.
 *
 * Important note: Every BitmapData creates its own Canvas element. Because BitmapData's are now Game Objects themselves, and don't
@@ -25878,7 +25879,7 @@ Phaser.BitmapData.prototype = {
 
     /**
     * Shifts the contents of this BitmapData by the distances given.
-    * 
+    *
     * The image will wrap-around the edges on all sides if the wrap argument is true (the default).
     *
     * @method Phaser.BitmapData#move
@@ -25905,7 +25906,7 @@ Phaser.BitmapData.prototype = {
 
     /**
     * Shifts the contents of this BitmapData horizontally.
-    * 
+    *
     * The image will wrap-around the sides if the wrap argument is true (the default).
     *
     * @method Phaser.BitmapData#moveH
@@ -25968,7 +25969,7 @@ Phaser.BitmapData.prototype = {
 
     /**
     * Shifts the contents of this BitmapData vertically.
-    * 
+    *
     * The image will wrap-around the sides if the wrap argument is true (the default).
     *
     * @method Phaser.BitmapData#moveV
@@ -26105,7 +26106,7 @@ Phaser.BitmapData.prototype = {
     * You can optionally define the area to clear.
     * If the arguments are left empty it will clear the entire canvas.
     *
-    * You may need to call BitmapData.update after this in order to clear out the pixel data, 
+    * You may need to call BitmapData.update after this in order to clear out the pixel data,
     * but Phaser will not do this automatically for you.
     *
     * @method Phaser.BitmapData#clear
@@ -26165,7 +26166,7 @@ Phaser.BitmapData.prototype = {
     * `var texture = bitmapdata.generateTexture('ball');`
     *
     * Then you can either apply the texture to a sprite:
-    * 
+    *
     * `game.add.sprite(0, 0, texture);`
     *
     * or by using the string based key:
@@ -26392,7 +26393,7 @@ Phaser.BitmapData.prototype = {
 
     /**
     * Replaces all pixels matching one color with another. The color values are given as two sets of RGBA values.
-    * An optional region parameter controls if the replacement happens in just a specific area of the BitmapData or the entire thing. 
+    * An optional region parameter controls if the replacement happens in just a specific area of the BitmapData or the entire thing.
     *
     * @method Phaser.BitmapData#replaceRGB
     * @param {number} r1 - The red color value to be replaced. Between 0 and 255.
@@ -26451,7 +26452,7 @@ Phaser.BitmapData.prototype = {
     * @return {Phaser.BitmapData} This BitmapData object for method chaining.
     */
     setHSL: function (h, s, l, region) {
-        
+
         var bHaveH = h || h === 0;
         var bHaveS = s || s === 0;
         var bHaveL = l || l === 0;
@@ -26707,9 +26708,9 @@ Phaser.BitmapData.prototype = {
     /**
     * Scans the BitmapData, pixel by pixel, until it encounters a pixel that isn't transparent (i.e. has an alpha value > 0).
     * It then stops scanning and returns an object containing the color of the pixel in r, g and b properties and the location in the x and y properties.
-    * 
+    *
     * The direction parameter controls from which direction it should start the scan:
-    * 
+    *
     * 0 = top to bottom
     * 1 = bottom to top
     * 2 = left to right
@@ -26846,7 +26847,7 @@ Phaser.BitmapData.prototype = {
      * You can optionally resize, translate, rotate, scale, alpha or blend as it's drawn.
      * All rotation, scaling and drawing takes place around the regions center point by default, but can be changed with the anchor parameters.
      * Note that the source image can also be this BitmapData, which can create some interesting effects.
-     * 
+     *
      * This method has a lot of parameters for maximum control.
      * You can use the more friendly methods like `copyRect` and `draw` to avoid having to remember them all.
      *
@@ -26880,6 +26881,7 @@ Phaser.BitmapData.prototype = {
         }
 
         this._image = source;
+        var resolution = 1;
 
         if (source instanceof Phaser.Sprite || source instanceof Phaser.Image || source instanceof Phaser.Text || source instanceof PIXI.Sprite)
         {
@@ -26898,6 +26900,7 @@ Phaser.BitmapData.prototype = {
             else
             {
                 this._image = source.texture.baseTexture.source;
+                resolution = source.texture.baseTexture.realResolution;
             }
 
             if (tx === undefined || tx === null) { tx = source.x; }
@@ -26946,6 +26949,7 @@ Phaser.BitmapData.prototype = {
                 else
                 {
                     this._image = source;
+                    resolution = PIXI.getResolutionOfUrl(source.src);
                 }
             }
 
@@ -27040,8 +27044,17 @@ Phaser.BitmapData.prototype = {
         ctx.scale(this._scale.x, this._scale.y);
 
         ctx.rotate(this._rotate);
-
-        ctx.drawImage(this._image, this._pos.x + x, this._pos.y + y, this._size.x, this._size.y, -newWidth * this._anchor.x, -newHeight * this._anchor.y, newWidth, newHeight);
+        ctx.drawImage(
+            this._image,
+            this._pos.x + x,
+            this._pos.y + y,
+            this._size.x,
+            this._size.y,
+            (-newWidth * this._anchor.x) / resolution,
+            (-newHeight * this._anchor.y) / resolution,
+            newWidth / resolution,
+            newHeight / resolution
+        );
 
         ctx.restore();
 
@@ -27120,7 +27133,7 @@ Phaser.BitmapData.prototype = {
 
     /**
     * A proxy for drawGroup that handles child iteration for more complex Game Objects.
-    * 
+    *
     * @method Phaser.BitmapData#drawGroupProxy
     * @private
     * @param {Phaser.Sprite|Phaser.Image|Phaser.BitmapText} child - The child to draw.
@@ -27145,24 +27158,23 @@ Phaser.BitmapData.prototype = {
                 this.copy(c, null, null, null, null, c.worldPosition.x, c.worldPosition.y, null, null, c.worldRotation, null, null, c.worldScale.x, c.worldScale.y, child.worldAlpha, blendMode, roundPx);
             }
         }
-
     },
 
     /**
     * Draws the Game Object or Group to this BitmapData and then recursively iterates through all of its children.
-    * 
+    *
     * If a child has an `exists` property then it (and its children) will be only be drawn if exists is `true`.
-    * 
-    * The children will be drawn at their `x` and `y` world space coordinates. If this is outside the bounds of the BitmapData 
-    * they won't be drawn. Depending on your requirements you may need to resize the BitmapData in advance to match the 
+    *
+    * The children will be drawn at their `x` and `y` world space coordinates. If this is outside the bounds of the BitmapData
+    * they won't be drawn. Depending on your requirements you may need to resize the BitmapData in advance to match the
     * bounds of the top-level Game Object.
-    * 
+    *
     * When drawing it will take into account the child's world rotation, scale and alpha values.
     *
     * It's perfectly valid to pass in `game.world` as the parent object, and it will iterate through the entire display list.
-    * 
+    *
     * Note: If you are trying to grab your entire game at the start of a State then you should ensure that at least 1 full update
-    * has taken place before doing so, otherwise all of the objects will render with incorrect positions and scales. You can 
+    * has taken place before doing so, otherwise all of the objects will render with incorrect positions and scales. You can
     * trigger an update yourself by calling `stage.updateTransform()` before calling `drawFull`.
     *
     * @method Phaser.BitmapData#drawFull
@@ -27379,7 +27391,7 @@ Phaser.BitmapData.prototype = {
             ctx.fillStyle = 'rgb(0,0,0)';
             ctx.fillText(text, x + 1, y + 1);
         }
-        
+
         ctx.fillStyle = color;
         ctx.fillText(text, x, y);
 
@@ -44702,7 +44714,8 @@ Phaser.Animation.generateFrameNames = function (prefix, start, stop, suffix, zer
 * @param {number} height - Height of the frame within the texture image.
 * @param {string} name - The name of the frame. In Texture Atlas data this is usually set to the filename.
 */
-Phaser.Frame = function (index, x, y, width, height, name) {
+Phaser.Frame = function (index, x, y, width, height,name, resolution) {
+    resolution = resolution || 1;
 
     /**
     * @property {number} index - The index of this Frame within the FrameData set it is being added to.
@@ -44712,42 +44725,44 @@ Phaser.Frame = function (index, x, y, width, height, name) {
     /**
     * @property {number} x - X position within the image to cut from.
     */
-    this.x = x;
+    this.x = x / resolution;
 
     /**
     * @property {number} y - Y position within the image to cut from.
     */
-    this.y = y;
+    this.y = y / resolution;
 
     /**
     * @property {number} width - Width of the frame.
     */
-    this.width = width;
+    this.width = width / resolution;
 
     /**
     * @property {number} height - Height of the frame.
     */
-    this.height = height;
+    this.height = height / resolution;
 
     /**
     * @property {string} name - Useful for Texture Atlas files (is set to the filename value).
     */
     this.name = name;
 
+    this.resolution = resolution;
+
     /**
     * @property {number} centerX - Center X position within the image to cut from.
     */
-    this.centerX = Math.floor(width / 2);
+    this.centerX = Math.floor(width / resolution / 2);
 
     /**
     * @property {number} centerY - Center Y position within the image to cut from.
     */
-    this.centerY = Math.floor(height / 2);
+    this.centerY = Math.floor(height / resolution / 2);
 
     /**
     * @property {number} distance - The distance from the top left to the bottom-right of this Frame.
     */
-    this.distance = Phaser.Math.distance(0, 0, width, height);
+    this.distance = Phaser.Math.distance(0, 0, width / resolution, height / resolution);
 
     /**
     * @property {boolean} rotated - Rotated? (not yet implemented)
@@ -44823,7 +44838,6 @@ Phaser.Frame.prototype = {
     * @param {integer} height - The new height of the Frame.
     */
     resize: function (width, height) {
-
         this.width = width;
         this.height = height;
         this.centerX = Math.floor(width / 2);
@@ -44835,7 +44849,6 @@ Phaser.Frame.prototype = {
         this.bottom = this.y + height;
 
     },
-
     /**
     * If the frame was trimmed when added to the Texture Atlas this records the trim and source data.
     *
@@ -44854,14 +44867,14 @@ Phaser.Frame.prototype = {
 
         if (trimmed)
         {
-            this.sourceSizeW = actualWidth;
-            this.sourceSizeH = actualHeight;
-            this.centerX = Math.floor(actualWidth / 2);
-            this.centerY = Math.floor(actualHeight / 2);
-            this.spriteSourceSizeX = destX;
-            this.spriteSourceSizeY = destY;
-            this.spriteSourceSizeW = destWidth;
-            this.spriteSourceSizeH = destHeight;
+            this.sourceSizeW = actualWidth / this.resolution;
+            this.sourceSizeH = actualHeight / this.resolution;
+            this.centerX = Math.floor(actualWidth / this.resolution / 2);
+            this.centerY = Math.floor(actualHeight / this.resolution / 2);
+            this.spriteSourceSizeX = destX / this.resolution;
+            this.spriteSourceSizeY = destY / this.resolution;
+            this.spriteSourceSizeW = destWidth / this.resolution;
+            this.spriteSourceSizeH = destHeight / this.resolution;
         }
 
     },
@@ -45294,7 +45307,7 @@ Phaser.AnimationParser = {
     * @param {object} json - The JSON data from the Texture Atlas. Must be in Array format.
     * @return {Phaser.FrameData} A FrameData object containing the parsed frames.
     */
-    JSONData: function (game, json) {
+    JSONData: function (game, json, resolution) {
 
         //  Malformed?
         if (!json['frames'])
@@ -45319,7 +45332,8 @@ Phaser.AnimationParser = {
                 frames[i].frame.y,
                 frames[i].frame.w,
                 frames[i].frame.h,
-                frames[i].filename
+                frames[i].filename,
+                resolution
             ));
 
             if (frames[i].trimmed)
@@ -45404,7 +45418,7 @@ Phaser.AnimationParser = {
     * @param {object} json - The JSON data from the Texture Atlas. Must be in JSON Hash format.
     * @return {Phaser.FrameData} A FrameData object containing the parsed frames.
     */
-    JSONDataHash: function (game, json) {
+    JSONDataHash: function (game, json, resolution) {
 
         //  Malformed?
         if (!json['frames'])
@@ -45430,7 +45444,8 @@ Phaser.AnimationParser = {
                 frames[key].frame.y,
                 frames[key].frame.w,
                 frames[key].frame.h,
-                key
+                key,
+                resolution
             ));
 
             if (frames[key].trimmed)
@@ -45770,16 +45785,18 @@ Phaser.Cache.prototype = {
             this.removeImage(key);
         }
 
+        var resolution = PIXI.getResolutionOfUrl(url);
+
         var img = {
             key: key,
             url: url,
             data: data,
-            base: new PIXI.BaseTexture(data),
-            frame: new Phaser.Frame(0, 0, 0, data.width, data.height, key),
+            base: new PIXI.BaseTexture(data, undefined, resolution),
+            frame: new Phaser.Frame(0, 0, 0, data.width, data.height, key, resolution),
             frameData: new Phaser.FrameData()
         };
 
-        img.frameData.addFrame(new Phaser.Frame(0, 0, 0, data.width, data.height, url));
+        img.frameData.addFrame(new Phaser.Frame(0, 0, 0, data.width, data.height, url, resolution));
 
         this._cache.image[key] = img;
 
@@ -45978,10 +45995,10 @@ Phaser.Cache.prototype = {
             font: null,
             base: new PIXI.BaseTexture(data)
         };
-        
+
         if (xSpacing === undefined) { xSpacing = 0; }
         if (ySpacing === undefined) { ySpacing = 0; }
-        
+
         if (atlasType === 'json')
         {
             obj.font = Phaser.LoaderParser.jsonBitmapFont(atlasData, obj.base, xSpacing, ySpacing);
@@ -46123,12 +46140,13 @@ Phaser.Cache.prototype = {
     * @param {number} format - The format of the texture atlas.
     */
     addTextureAtlas: function (key, url, data, atlasData, format) {
+        var resolution = PIXI.getResolutionOfUrl(url);
 
         var obj = {
             key: key,
             url: url,
             data: data,
-            base: new PIXI.BaseTexture(data)
+            base: new PIXI.BaseTexture(data, null, resolution)
         };
 
         if (format === Phaser.Loader.TEXTURE_ATLAS_XML_STARLING)
@@ -46148,7 +46166,7 @@ Phaser.Cache.prototype = {
             }
             else
             {
-                obj.frameData = Phaser.AnimationParser.JSONDataHash(this.game, atlasData, key);
+                obj.frameData = Phaser.AnimationParser.JSONDataHash(this.game, atlasData, resolution);
             }
         }
 

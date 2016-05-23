@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.4.8 "Watch Hill" - Built: Thu May 19 2016 12:22:49
+* v2.4.8 "Watch Hill" - Built: Mon May 23 2016 14:35:13
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -1676,7 +1676,7 @@ PIXI.Sprite.prototype.getBounds = function(matrix)
             a *= -1;
             var temp = w0;
             w0 = -w1;
-            w1 = -temp; 
+            w1 = -temp;
         }
 
         if (d < 0)
@@ -1684,11 +1684,11 @@ PIXI.Sprite.prototype.getBounds = function(matrix)
             d *= -1;
             var temp = h0;
             h0 = -h1;
-            h1 = -temp; 
+            h1 = -temp;
         }
 
         // this means there is no rotation going on right? RIGHT?
-        // if thats the case then we can avoid checking the bound values! yay         
+        // if thats the case then we can avoid checking the bound values! yay
         minX = a * w1 + tx;
         maxX = a * w0 + tx;
         minY = d * h1 + ty;
@@ -1962,14 +1962,14 @@ PIXI.Sprite.fromImage = function(imageId, crossorigin, scaleMode)
  */
 
 /**
- * The SpriteBatch class is a really fast version of the DisplayObjectContainer 
+ * The SpriteBatch class is a really fast version of the DisplayObjectContainer
  * built solely for speed, so use when you need a lot of sprites or particles.
- * And it's extremely easy to use : 
+ * And it's extremely easy to use :
 
     var container = new PIXI.SpriteBatch();
- 
+
     stage.addChild(container);
- 
+
     for(var i  = 0; i < 100; i++)
     {
         var sprite = new PIXI.Sprite.fromImage("myImage.png");
@@ -2024,7 +2024,7 @@ PIXI.SpriteBatch.prototype.updateTransform = function()
 * Renders the object using the WebGL renderer
 *
 * @method _renderWebGL
-* @param renderSession {RenderSession} 
+* @param renderSession {RenderSession}
 * @private
 */
 PIXI.SpriteBatch.prototype._renderWebGL = function(renderSession)
@@ -2035,34 +2035,34 @@ PIXI.SpriteBatch.prototype._renderWebGL = function(renderSession)
     {
         this.initWebGL(renderSession.gl);
     }
-    
+
     if (this.fastSpriteBatch.gl !== renderSession.gl)
     {
         this.fastSpriteBatch.setContext(renderSession.gl);
     }
 
     renderSession.spriteBatch.stop();
-    
+
     renderSession.shaderManager.setShader(renderSession.shaderManager.fastShader);
-    
+
     this.fastSpriteBatch.begin(this, renderSession);
     this.fastSpriteBatch.render(this);
 
     renderSession.spriteBatch.start();
- 
+
 };
 
 /**
 * Renders the object using the Canvas renderer
 *
 * @method _renderCanvas
-* @param renderSession {RenderSession} 
+* @param renderSession {RenderSession}
 * @private
 */
 PIXI.SpriteBatch.prototype._renderCanvas = function(renderSession)
 {
     if (!this.visible || this.alpha <= 0 || !this.children.length) return;
-    
+
     var context = renderSession.context;
 
     context.globalAlpha = this.worldAlpha;
@@ -2070,7 +2070,7 @@ PIXI.SpriteBatch.prototype._renderCanvas = function(renderSession)
     this.displayObjectUpdateTransform();
 
     var transform = this.worldTransform;
-       
+
     var isRotated = true;
 
     for (var i = 0; i < this.children.length; i++)
@@ -2106,15 +2106,15 @@ PIXI.SpriteBatch.prototype._renderCanvas = function(renderSession)
         else
         {
             if (!isRotated) isRotated = true;
-    
+
             child.displayObjectUpdateTransform();
-           
+
             var childTransform = child.worldTransform;
             var tx = (childTransform.tx * renderSession.resolution) + renderSession.shakeX;
             var ty = (childTransform.ty * renderSession.resolution) + renderSession.shakeY;
 
             // allow for trimming
-           
+
             if (renderSession.roundPixels)
             {
                 context.setTransform(childTransform.a, childTransform.b, childTransform.c, childTransform.d, tx | 0, ty | 0);
@@ -2141,7 +2141,7 @@ PIXI.SpriteBatch.prototype._renderCanvas = function(renderSession)
 /**
  * @author Mat Groves http://matgroves.com/ @Doormat23
  */
- 
+
 /**
  * Converts a hex color number to an [R, G, B] array
  *
@@ -2225,12 +2225,31 @@ PIXI.getNextPowerOfTwo = function(number)
  * @method isPowerOfTwo
  * @param width {Number}
  * @param height {Number}
- * @return {Boolean} 
+ * @return {Boolean}
  */
 PIXI.isPowerOfTwo = function(width, height)
 {
     return (width > 0 && (width & (width - 1)) === 0 && height > 0 && (height & (height - 1)) === 0);
 
+};
+
+/**
+ * get the resolution of an asset by looking for the prefix
+ * used by spritesheets and image urls
+ *
+ * @param url {string} the image path
+ * @return {number}
+ */
+PIXI.getResolutionOfUrl = function (url)
+{
+    var resolution = /@(.+)x/.exec(url);
+
+    if (resolution)
+    {
+        return parseFloat(resolution[1]);
+    }
+
+    return 1;
 };
 
 /**
@@ -4492,11 +4511,11 @@ PIXI.WebGLShaderManager.prototype.destroy = function()
 
 /**
  * @author Mat Groves
- * 
+ *
  * Big thanks to the very clever Matt DesLauriers <mattdesl> https://github.com/mattdesl/
  * for creating the original pixi version!
  * Also a thanks to https://github.com/bchevalier for tweaking the tint and alpha so that they now share 4 bytes on the vertex buffer
- * 
+ *
  * Heavily inspired by LibGDX's WebGLSpriteBatch:
  * https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/graphics/g2d/WebGLSpriteBatch.java
  */
@@ -4558,7 +4577,7 @@ PIXI.WebGLSpriteBatch = function()
      * @type Uint16Array
      */
     this.indices = new PIXI.Uint16Array(numIndices);
-    
+
     /**
      * @property lastIndexCount
      * @type Number
@@ -4701,6 +4720,7 @@ PIXI.WebGLSpriteBatch.prototype.render = function(sprite, matrix)
 
     //  They provided an alternative rendering matrix, so use it
     var wt = sprite.worldTransform;
+    var wt = sprite.worldTransform;
 
     if (matrix)
     {
@@ -4727,7 +4747,7 @@ PIXI.WebGLSpriteBatch.prototype.render = function(sprite, matrix)
     var aY = sprite.anchor.y;
 
     var w0, w1, h0, h1;
-        
+
     if (texture.trim)
     {
         // if the sprite is trimmed then we need to add the extra space before transforming the sprite coords.
@@ -4797,7 +4817,7 @@ PIXI.WebGLSpriteBatch.prototype.render = function(sprite, matrix)
         positions[i+15] = a * w1 + c * h0 + tx;
         positions[i+16] = d * h0 + b * w1 + ty;
     }
-    
+
     // uv
     positions[i+2] = uvs.x0;
     positions[i+3] = uvs.y0;
@@ -4826,7 +4846,7 @@ PIXI.WebGLSpriteBatch.prototype.render = function(sprite, matrix)
 
 /**
 * Renders a TilingSprite using the spriteBatch.
-* 
+*
 * @method renderTilingSprite
 * @param sprite {TilingSprite} the sprite to render
 */
@@ -4928,7 +4948,7 @@ PIXI.WebGLSpriteBatch.prototype.renderTilingSprite = function(sprite)
     positions[i++] = uvs.y1;
     // color
     colors[i++] = color;
-    
+
     // xy
     positions[i++] = a * w0 + c * h0 + tx;
     positions[i++] = d * h0 + b * w0 + ty;
@@ -4989,7 +5009,7 @@ PIXI.WebGLSpriteBatch.prototype.flush = function()
         gl.vertexAttribPointer(shader.colorAttribute, 4, gl.UNSIGNED_BYTE, true, stride, 4 * 4);
     }
 
-    // upload the verts to the buffer  
+    // upload the verts to the buffer
     if (this.currentBatchSize > (this.size * 0.5))
     {
         gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.vertices);
@@ -5013,7 +5033,7 @@ PIXI.WebGLSpriteBatch.prototype.flush = function()
     var sprite;
 
     for (var i = 0, j = this.currentBatchSize; i < j; i++) {
-        
+
         sprite = this.sprites[i];
 
         if (sprite.tilingTexture)
@@ -5055,7 +5075,7 @@ PIXI.WebGLSpriteBatch.prototype.flush = function()
             if (shaderSwap)
             {
                 currentShader = nextShader;
-                
+
                 shader = currentShader.shaders[gl.id];
 
                 if (!shader)
@@ -5076,7 +5096,7 @@ PIXI.WebGLSpriteBatch.prototype.flush = function()
                 {
                     shader.syncUniforms();
                 }
-                
+
                 // both these only need to be set if they are changing..
                 // set the projection
                 var projection = this.renderSession.projection;
@@ -5131,7 +5151,7 @@ PIXI.WebGLSpriteBatch.prototype.renderBatch = function(texture, size, startIndex
 
     // now draw those suckas!
     gl.drawElements(gl.TRIANGLES, size * 6, gl.UNSIGNED_SHORT, startIndex * 6 * 2);
-    
+
     // increment the draw count
     this.renderSession.drawCount++;
 };
@@ -5155,21 +5175,22 @@ PIXI.WebGLSpriteBatch.prototype.start = function()
 
 /**
 * Destroys the SpriteBatch.
-* 
+*
 * @method destroy
 */
 PIXI.WebGLSpriteBatch.prototype.destroy = function()
 {
     this.vertices = null;
     this.indices = null;
-    
+
     this.gl.deleteBuffer(this.vertexBuffer);
     this.gl.deleteBuffer(this.indexBuffer);
-    
+
     this.currentBaseTexture = null;
-    
+
     this.gl = null;
 };
+
 /**
  * @author Mat Groves
  * 
@@ -6814,17 +6835,20 @@ PIXI.BaseTextureCacheIdGenerator = 0;
  * @constructor
  * @param source {String} the source object (image or canvas)
  * @param scaleMode {Number} See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values
+ * @param resolution {number} the resolution of the texture for devices with different pixel ratios
  */
-PIXI.BaseTexture = function(source, scaleMode)
+PIXI.BaseTexture = function(source, scaleMode, resolution)
 {
     /**
-     * The Resolution of the texture. 
+     * The Resolution of the texture.
      *
      * @property resolution
      * @type Number
      */
     this.resolution = 1;
-    
+
+    this.realResolution = resolution || 1;
+
     /**
      * [read-only] The width of the base texture set when the image has loaded
      *
@@ -6844,8 +6868,24 @@ PIXI.BaseTexture = function(source, scaleMode)
     this.height = 100;
 
     /**
+     * Used to store the actual width of the source of this texture
+     *
+     * @member {number}
+     * @readOnly
+     */
+    this.realWidth = 100;
+
+    /**
+     * Used to store the actual height of the source of this texture
+     *
+     * @member {number}
+     * @readOnly
+     */
+    this.realHeight = 100;
+
+    /**
      * The scale mode to apply when scaling this texture
-     * 
+     *
      * @property scaleMode
      * @type {Number}
      * @default PIXI.scaleModes.LINEAR
@@ -6892,7 +6932,7 @@ PIXI.BaseTexture = function(source, scaleMode)
     /**
      * Set this to true if a mipmap of this texture needs to be generated. This value needs to be set before the texture is used
      * Also the texture must be a power of two size to work
-     * 
+     *
      * @property mipmap
      * @type {Boolean}
      */
@@ -6913,17 +6953,22 @@ PIXI.BaseTexture = function(source, scaleMode)
     if ((this.source.complete || this.source.getContext) && this.source.width && this.source.height)
     {
         this.hasLoaded = true;
-        this.width = this.source.naturalWidth || this.source.width;
-        this.height = this.source.naturalHeight || this.source.height;
+
+        this.realWidth = this.source.naturalWidth || this.source.width;
+        this.realHeight = this.source.naturalHeight || this.source.height;
+
+        this.width = this.realWidth / this.realResolution;
+        this.height = this.realHeight / this.realResolution;
+
         this.dirty();
     }
 
     /**
      * A BaseTexture can be set to skip the rendering phase in the WebGL Sprite Batch.
-     * 
+     *
      * You may want to do this if you have a parent Sprite with no visible texture (i.e. uses the internal `__default` texture)
      * that has children that you do want to render, without causing a batch flush in the process.
-     * 
+     *
      * @property skipRender
      * @type Boolean
      */
@@ -7041,7 +7086,7 @@ PIXI.BaseTexture.prototype.unloadFromGPU = function()
         {
             gl.deleteTexture(glTexture);
         }
-        
+
     }
 
     this._glTextures.length = 0;
@@ -7060,7 +7105,7 @@ PIXI.BaseTexture.prototype.unloadFromGPU = function()
  * @param scaleMode {Number} See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values
  * @return {BaseTexture}
  */
-PIXI.BaseTexture.fromImage = function(imageUrl, crossorigin, scaleMode)
+PIXI.BaseTexture.fromImage = function(imageUrl, crossorigin, scaleMode, resolution)
 {
     var baseTexture = PIXI.BaseTextureCache[imageUrl];
 
@@ -7078,7 +7123,7 @@ PIXI.BaseTexture.fromImage = function(imageUrl, crossorigin, scaleMode)
         }
 
         image.src = imageUrl;
-        baseTexture = new PIXI.BaseTexture(image, scaleMode);
+        baseTexture = new PIXI.BaseTexture(image, scaleMode, resolution);
         baseTexture.imageUrl = imageUrl;
         PIXI.BaseTextureCache[imageUrl] = baseTexture;
 
