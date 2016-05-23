@@ -32,10 +32,12 @@
             resolution: 2,
             state: { create: create, preload: preload}
         });
-        var img = null, btn = null;
+        var img = null, btn = null, bmd = null, spr = null, mask = null;
 
         function preload() {
             game.load.image('bg', 'images/bg@1x.png');
+            game.load.image('mask1', 'images/mask@1x.png');
+            game.load.image('mask2', 'images/mask@0.5x.png');
             game.load.atlas('atlas1', 'atlas/atlas@1x.png', 'atlas/atlas@1x.json');
             game.load.atlas('atlas2', 'atlas/atlas@0.5x.png', 'atlas/atlas@0.5x.json');
         }
@@ -50,11 +52,27 @@
             btn1.input.pixelPerfectOver = true;
             btn1.anchor.set(0.5);
 
-            btn2 = game.add.image(game.width / 2, game.height / 2 + 75, 'atlas2', 'btn_01.png');
-            btn2.inputEnabled = true;
-            btn2.input.useHandCursor = true;
-            btn2.input.pixelPerfectOver = true;
-            btn2.anchor.set(0.5);
+//            btn2 = game.add.image(game.width / 2, game.height / 2 + 75, 'atlas2', 'btn_01.png');
+//            btn2.inputEnabled = true;
+//            btn2.input.useHandCursor = true;
+//            btn2.input.pixelPerfectOver = true;
+//            btn2.anchor.set(0.5);
+
+            mask = new Phaser.Image(game, 0, 0, 'mask2');
+            puzzle = new Phaser.Image(game, 0, 0, 'atlas2');
+
+            bmd = new Phaser.BitmapData(game, 'test', 104, 106);
+            bmd.alphaMask(puzzle, mask);
+            spr = game.add.image(game.width / 2, game.height / 2 + 75, bmd);
+            spr.anchor.set(0.5);
+
+            mask = new Phaser.Image(game, 0, 0, 'mask1');
+            puzzle = new Phaser.Image(game, 0, 0, 'atlas1');
+
+            bmd = new Phaser.BitmapData(game, 'test', 104, 106);
+            bmd.alphaMask(puzzle, mask);
+            spr = game.add.image(game.width / 2, game.height / 2 + 150, bmd);
+            spr.anchor.set(0.5);
         }
     </script>
 </head>
