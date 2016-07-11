@@ -1,10 +1,10 @@
 /**
  * @author Mat Groves
- * 
+ *
  * Big thanks to the very clever Matt DesLauriers <mattdesl> https://github.com/mattdesl/
  * for creating the original pixi version!
  * Also a thanks to https://github.com/bchevalier for tweaking the tint and alpha so that they now share 4 bytes on the vertex buffer
- * 
+ *
  * Heavily inspired by LibGDX's WebGLSpriteBatch:
  * https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/graphics/g2d/WebGLSpriteBatch.java
  */
@@ -66,7 +66,7 @@ PIXI.WebGLSpriteBatch = function()
      * @type Uint16Array
      */
     this.indices = new PIXI.Uint16Array(numIndices);
-    
+
     /**
      * @property lastIndexCount
      * @type Number
@@ -209,6 +209,7 @@ PIXI.WebGLSpriteBatch.prototype.render = function(sprite, matrix)
 
     //  They provided an alternative rendering matrix, so use it
     var wt = sprite.worldTransform;
+    var wt = sprite.worldTransform;
 
     if (matrix)
     {
@@ -235,7 +236,7 @@ PIXI.WebGLSpriteBatch.prototype.render = function(sprite, matrix)
     var aY = sprite.anchor.y;
 
     var w0, w1, h0, h1;
-        
+
     if (texture.trim)
     {
         // if the sprite is trimmed then we need to add the extra space before transforming the sprite coords.
@@ -305,7 +306,7 @@ PIXI.WebGLSpriteBatch.prototype.render = function(sprite, matrix)
         positions[i+15] = a * w1 + c * h0 + tx;
         positions[i+16] = d * h0 + b * w1 + ty;
     }
-    
+
     // uv
     positions[i+2] = uvs.x0;
     positions[i+3] = uvs.y0;
@@ -334,7 +335,7 @@ PIXI.WebGLSpriteBatch.prototype.render = function(sprite, matrix)
 
 /**
 * Renders a TilingSprite using the spriteBatch.
-* 
+*
 * @method renderTilingSprite
 * @param sprite {TilingSprite} the sprite to render
 */
@@ -436,7 +437,7 @@ PIXI.WebGLSpriteBatch.prototype.renderTilingSprite = function(sprite)
     positions[i++] = uvs.y1;
     // color
     colors[i++] = color;
-    
+
     // xy
     positions[i++] = a * w0 + c * h0 + tx;
     positions[i++] = d * h0 + b * w0 + ty;
@@ -497,7 +498,7 @@ PIXI.WebGLSpriteBatch.prototype.flush = function()
         gl.vertexAttribPointer(shader.colorAttribute, 4, gl.UNSIGNED_BYTE, true, stride, 4 * 4);
     }
 
-    // upload the verts to the buffer  
+    // upload the verts to the buffer
     if (this.currentBatchSize > (this.size * 0.5))
     {
         gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.vertices);
@@ -521,7 +522,7 @@ PIXI.WebGLSpriteBatch.prototype.flush = function()
     var sprite;
 
     for (var i = 0, j = this.currentBatchSize; i < j; i++) {
-        
+
         sprite = this.sprites[i];
 
         if (sprite.tilingTexture)
@@ -563,7 +564,7 @@ PIXI.WebGLSpriteBatch.prototype.flush = function()
             if (shaderSwap)
             {
                 currentShader = nextShader;
-                
+
                 shader = currentShader.shaders[gl.id];
 
                 if (!shader)
@@ -584,7 +585,7 @@ PIXI.WebGLSpriteBatch.prototype.flush = function()
                 {
                     shader.syncUniforms();
                 }
-                
+
                 // both these only need to be set if they are changing..
                 // set the projection
                 var projection = this.renderSession.projection;
@@ -639,7 +640,7 @@ PIXI.WebGLSpriteBatch.prototype.renderBatch = function(texture, size, startIndex
 
     // now draw those suckas!
     gl.drawElements(gl.TRIANGLES, size * 6, gl.UNSIGNED_SHORT, startIndex * 6 * 2);
-    
+
     // increment the draw count
     this.renderSession.drawCount++;
 };
@@ -663,18 +664,18 @@ PIXI.WebGLSpriteBatch.prototype.start = function()
 
 /**
 * Destroys the SpriteBatch.
-* 
+*
 * @method destroy
 */
 PIXI.WebGLSpriteBatch.prototype.destroy = function()
 {
     this.vertices = null;
     this.indices = null;
-    
+
     this.gl.deleteBuffer(this.vertexBuffer);
     this.gl.deleteBuffer(this.indexBuffer);
-    
+
     this.currentBaseTexture = null;
-    
+
     this.gl = null;
 };

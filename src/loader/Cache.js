@@ -260,16 +260,18 @@ Phaser.Cache.prototype = {
             this.removeImage(key);
         }
 
+        var resolution = PIXI.getResolutionOfUrl(url);
+
         var img = {
             key: key,
             url: url,
             data: data,
-            base: new PIXI.BaseTexture(data),
-            frame: new Phaser.Frame(0, 0, 0, data.width, data.height, key),
+            base: new PIXI.BaseTexture(data, undefined, resolution),
+            frame: new Phaser.Frame(0, 0, 0, data.width, data.height, key, resolution),
             frameData: new Phaser.FrameData()
         };
 
-        img.frameData.addFrame(new Phaser.Frame(0, 0, 0, data.width, data.height, url));
+        img.frameData.addFrame(new Phaser.Frame(0, 0, 0, data.width, data.height, url, resolution));
 
         this._cache.image[key] = img;
 
@@ -624,12 +626,13 @@ Phaser.Cache.prototype = {
     * @param {number} format - The format of the texture atlas.
     */
     addTextureAtlas: function (key, url, data, atlasData, format) {
+        var resolution = PIXI.getResolutionOfUrl(url);
 
         var obj = {
             key: key,
             url: url,
             data: data,
-            base: new PIXI.BaseTexture(data)
+            base: new PIXI.BaseTexture(data, null, resolution)
         };
 
         if (format === Phaser.Loader.TEXTURE_ATLAS_XML_STARLING)
@@ -649,7 +652,7 @@ Phaser.Cache.prototype = {
             }
             else
             {
-                obj.frameData = Phaser.AnimationParser.JSONDataHash(this.game, atlasData, key);
+                obj.frameData = Phaser.AnimationParser.JSONDataHash(this.game, atlasData, resolution);
             }
         }
 

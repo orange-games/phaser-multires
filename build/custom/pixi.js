@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.6.1 "Caemlyn" - Built: Mon Jul 11 2016 10:00:12
+* v2.4.8 "Watch Hill" - Built: Mon May 23 2016 14:35:13
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -18,7 +18,8 @@
 * Phaser uses p2.js for full-body physics, created by Stefan Hedman https://github.com/schteppe/p2.js @schteppe
 * Phaser contains a port of N+ Physics, converted by Richard Davey, original by http://www.metanetsoftware.com
 *
-* Many thanks to Adam Saltsman (@ADAMATOMIC) for releasing Flixel, from which both Phaser and my love of framework development originate.
+* Many thanks to Adam Saltsman (@ADAMATOMIC) for releasing Flixel, from which both Phaser
+* and my love of framework development originate.
 *
 * Follow development at http://phaser.io and on our forum
 *
@@ -155,91 +156,64 @@ PIXI.defaultRenderOptions = {
  */
 
 /**
-* @author       Mat Groves http://matgroves.com @Doormat23
-* @author       Richard Davey <rich@photonstorm.com>
-* @license      {@link https://github.com/photonstorm/phaser/blob/master/license.txt|MIT License}
-*/
+ * @author Mat Groves http://matgroves.com/ @Doormat23
+ */
 
 /**
-* The base class for all objects that are rendered. Contains properties for position, scaling,
-* rotation, masks and cache handling.
-* 
-* This is an abstract class and should not be used on its own, rather it should be extended.
-*
-* It is used internally by the likes of PIXI.Sprite.
-*
-* @class PIXI.DisplayObject
-* @constructor
-*/
-PIXI.DisplayObject = function() {
-
+ * The base class for all objects that are rendered on the screen.
+ * This is an abstract class and should not be used on its own rather it should be extended.
+ *
+ * @class DisplayObject
+ * @constructor
+ */
+PIXI.DisplayObject = function()
+{
     /**
-    * The coordinates, in pixels, of this DisplayObject, relative to its parent container.
-    * 
-    * The value of this property does not reflect any positioning happening further up the display list.
-    * To obtain that value please see the `worldPosition` property.
-    * 
-    * @property {PIXI.Point} position
-    * @default
-    */
+     * The coordinate of the object relative to the local coordinates of the parent.
+     *
+     * @property position
+     * @type Point
+     */
     this.position = new PIXI.Point(0, 0);
 
     /**
-    * The scale of this DisplayObject. A scale of 1:1 represents the DisplayObject
-    * at its default size. A value of 0.5 would scale this DisplayObject by half, and so on.
-    * 
-    * The value of this property does not reflect any scaling happening further up the display list.
-    * To obtain that value please see the `worldScale` property.
-    * 
-    * @property {PIXI.Point} scale
-    * @default
-    */
+     * The scale factor of the object.
+     *
+     * @property scale
+     * @type Point
+     */
     this.scale = new PIXI.Point(1, 1);
 
     /**
-    * The pivot point of this DisplayObject that it rotates around. The values are expressed
-    * in pixel values.
-    * @property {PIXI.Point} pivot
-    * @default
-    */
+     * The pivot point of the displayObject that it rotates around
+     *
+     * @property pivot
+     * @type Point
+     */
     this.pivot = new PIXI.Point(0, 0);
 
     /**
-    * The rotation of this DisplayObject. The value is given, and expressed, in radians, and is based on
-    * a right-handed orientation.
-    * 
-    * The value of this property does not reflect any rotation happening further up the display list.
-    * To obtain that value please see the `worldRotation` property.
-    * 
-    * @property {number} rotation
-    * @default
-    */
+     * The rotation of the object in radians.
+     *
+     * @property rotation
+     * @type Number
+     */
     this.rotation = 0;
 
     /**
-    * The alpha value of this DisplayObject. A value of 1 is fully opaque. A value of 0 is transparent.
-    * Please note that an object with an alpha value of 0 is skipped during the render pass.
-    * 
-    * The value of this property does not reflect any alpha values set further up the display list.
-    * To obtain that value please see the `worldAlpha` property.
-    * 
-    * @property {number} alpha
-    * @default
-    */
+     * The opacity of the object.
+     *
+     * @property alpha
+     * @type Number
+     */
     this.alpha = 1;
 
     /**
-    * The visibility of this DisplayObject. A value of `false` makes the object invisible.
-    * A value of `true` makes it visible. Please note that an object with a visible value of
-    * `false` is skipped during the render pass. Equally a DisplayObject with visible false will
-    * not render any of its children.
-    * 
-    * The value of this property does not reflect any visible values set further up the display list.
-    * To obtain that value please see the `worldVisible` property.
-    * 
-    * @property {boolean} visible
-    * @default
-    */
+     * The visibility of the object.
+     *
+     * @property visible
+     * @type Boolean
+     */
     this.visible = true;
 
     /**
@@ -252,729 +226,689 @@ PIXI.DisplayObject = function() {
     this.hitArea = null;
 
     /**
-    * Should this DisplayObject be rendered by the renderer? An object with a renderable value of
-    * `false` is skipped during the render pass.
-    * 
-    * @property {boolean} renderable
-    * @default
-    */
+     * Can this object be rendered
+     *
+     * @property renderable
+     * @type Boolean
+     */
     this.renderable = false;
 
     /**
-    * The parent DisplayObjectContainer that this DisplayObject is a child of.
-    * All DisplayObjects must belong to a parent in order to be rendered.
-    * The root parent is the Stage object. This property is set automatically when the
-    * DisplayObject is added to, or removed from, a DisplayObjectContainer.
-    * 
-    * @property {PIXI.DisplayObjectContainer} parent
-    * @default
-    * @readOnly
-    */
+     * [read-only] The display object container that contains this display object.
+     *
+     * @property parent
+     * @type DisplayObjectContainer
+     * @readOnly
+     */
     this.parent = null;
 
     /**
-    * The stage that this DisplayObject is connected to.
-    * 
-    * @property {PIXI.Stage} stage
-    * @default
-    * @readOnly
-    */
+     * [read-only] The stage the display object is connected to, or undefined if it is not connected to the stage.
+     *
+     * @property stage
+     * @type Stage
+     * @readOnly
+     */
     this.stage = null;
 
     /**
-    * The multiplied alpha value of this DisplayObject. A value of 1 is fully opaque. A value of 0 is transparent.
-    * This value is the calculated total, based on the alpha values of all parents of this DisplayObjects 
-    * in the display list.
-    * 
-    * To obtain, and set, the local alpha value, see the `alpha` property.
-    *
-    * Note: This property is only updated at the end of the `updateTransform` call, once per render. Until 
-    * that happens this property will contain values based on the previous frame. Be mindful of this if
-    * accessing this property outside of the normal game flow, i.e. from an asynchronous event callback.
-    * 
-    * @property {number} worldAlpha
-    * @readOnly
-    */
+     * [read-only] The multiplied alpha of the displayObject
+     *
+     * @property worldAlpha
+     * @type Number
+     * @readOnly
+     */
     this.worldAlpha = 1;
 
     /**
-    * The current transform of this DisplayObject.
-    * 
-    * This property contains the calculated total, based on the transforms of all parents of this 
-    * DisplayObject in the display list.
-    *
-    * Note: This property is only updated at the end of the `updateTransform` call, once per render. Until 
-    * that happens this property will contain values based on the previous frame. Be mindful of this if
-    * accessing this property outside of the normal game flow, i.e. from an asynchronous event callback.
-    *
-    * @property {PIXI.Matrix} worldTransform
-    * @readOnly
-    */
+     * [read-only] Current transform of the object based on world (parent) factors
+     *
+     * @property worldTransform
+     * @type Matrix
+     * @readOnly
+     * @private
+     */
     this.worldTransform = new PIXI.Matrix();
 
     /**
-    * The coordinates, in pixels, of this DisplayObject within the world.
-    * 
-    * This property contains the calculated total, based on the positions of all parents of this 
-    * DisplayObject in the display list.
-    *
-    * Note: This property is only updated at the end of the `updateTransform` call, once per render. Until 
-    * that happens this property will contain values based on the previous frame. Be mindful of this if
-    * accessing this property outside of the normal game flow, i.e. from an asynchronous event callback.
-    * 
-    * @property {PIXI.Point} worldPosition
-    * @readOnly
-    */
+     * The position of the Display Object based on the world transform.
+     * This value is updated at the end of updateTransform and takes all parent transforms into account.
+     *
+     * @property worldPosition
+     * @type Point
+     * @readOnly
+     */
     this.worldPosition = new PIXI.Point(0, 0);
 
     /**
-    * The global scale of this DisplayObject.
-    * 
-    * This property contains the calculated total, based on the scales of all parents of this 
-    * DisplayObject in the display list.
-    *
-    * Note: This property is only updated at the end of the `updateTransform` call, once per render. Until 
-    * that happens this property will contain values based on the previous frame. Be mindful of this if
-    * accessing this property outside of the normal game flow, i.e. from an asynchronous event callback.
-    * 
-    * @property {PIXI.Point} worldScale
-    * @readOnly
-    */
+     * The scale of the Display Object based on the world transform.
+     * This value is updated at the end of updateTransform and takes all parent transforms into account.
+     *
+     * @property worldScale
+     * @type Point
+     * @readOnly
+     */
     this.worldScale = new PIXI.Point(1, 1);
 
     /**
-    * The rotation, in radians, of this DisplayObject.
-    * 
-    * This property contains the calculated total, based on the rotations of all parents of this 
-    * DisplayObject in the display list.
-    *
-    * Note: This property is only updated at the end of the `updateTransform` call, once per render. Until 
-    * that happens this property will contain values based on the previous frame. Be mindful of this if
-    * accessing this property outside of the normal game flow, i.e. from an asynchronous event callback.
-    * 
-    * @property {number} worldRotation
-    * @readOnly
-    */
+     * The rotation of the Display Object, in radians, based on the world transform.
+     * This value is updated at the end of updateTransform and takes all parent transforms into account.
+     *
+     * @property worldRotation
+     * @type Number
+     * @readOnly
+     */
     this.worldRotation = 0;
 
     /**
-    * The rectangular area used by filters when rendering a shader for this DisplayObject.
-    *
-    * @property {PIXI.Rectangle} filterArea
-    * @type Rectangle
-    * @default
-    */
-    this.filterArea = null;
-
-    /**
-    * @property {number} _sr - Cached rotation value.
-    * @private
-    */
+     * cached sin rotation and cos rotation
+     *
+     * @property _sr
+     * @type Number
+     * @private
+     */
     this._sr = 0;
 
     /**
-    * @property {number} _cr - Cached rotation value.
-    * @private
-    */
+     * cached sin rotation and cos rotation
+     *
+     * @property _cr
+     * @type Number
+     * @private
+     */
     this._cr = 1;
 
     /**
-    * @property {PIXI.Rectangle} _bounds - The cached bounds of this object.
-    * @private
-    */
+     * The area the filter is applied to like the hitArea this is used as more of an optimisation
+     * rather than figuring out the dimensions of the displayObject each frame you can set this rectangle
+     *
+     * @property filterArea
+     * @type Rectangle
+     */
+    this.filterArea = null;
+
+    /**
+     * The original, cached bounds of the object
+     *
+     * @property _bounds
+     * @type Rectangle
+     * @private
+     */
     this._bounds = new PIXI.Rectangle(0, 0, 1, 1);
 
     /**
-    * @property {PIXI.Rectangle} _currentBounds - The most recently calculated bounds of this object.
-    * @private
-    */
+     * The most up-to-date bounds of the object
+     *
+     * @property _currentBounds
+     * @type Rectangle
+     * @private
+     */
     this._currentBounds = null;
 
     /**
-    * @property {PIXI.Rectangle} _mask - The cached mask of this object.
-    * @private
-    */
+     * The original, cached mask of the object
+     *
+     * @property _mask
+     * @type Rectangle
+     * @private
+     */
     this._mask = null;
 
     /**
-    * @property {boolean} _cacheAsBitmap - Internal cache as bitmap flag.
-    * @private
-    */
+     * Cached internal flag.
+     *
+     * @property _cacheAsBitmap
+     * @type Boolean
+     * @private
+     */
     this._cacheAsBitmap = false;
 
     /**
-    * @property {boolean} _cacheIsDirty - Internal dirty cache flag.
-    * @private
-    */
+     * Cached internal flag.
+     *
+     * @property _cacheIsDirty
+     * @type Boolean
+     * @private
+     */
     this._cacheIsDirty = false;
 
 };
 
+// constructor
 PIXI.DisplayObject.prototype.constructor = PIXI.DisplayObject;
 
-PIXI.DisplayObject.prototype = {
-
-    /**
-    * Destroy this DisplayObject.
-    *
-    * Removes any cached sprites, sets renderable flag to false, and nulls references to the Stage, filters,
-    * bounds and mask.
-    *
-    * Also iteratively calls `destroy` on any children.
-    *
-    * @method PIXI.DisplayObject#destroy
-    */
-    destroy: function () {
-
-        if (this.children)
-        {
-            var i = this.children.length;
-
-            while (i--)
-            {
-                this.children[i].destroy();
-            }
-
-            this.children = [];
-        }
-
-        this.hitArea = null;
-        this.parent = null;
-        this.stage = null;
-        this.worldTransform = null;
-        this.filterArea = null;
-        this.renderable = false;
-
-        this._bounds = null;
-        this._currentBounds = null;
-        this._mask = null;
-
-        this._destroyCachedSprite();
-
-    },
-
-    /*
-    * Updates the transform matrix this DisplayObject uses for rendering.
-    *
-    * If the object has no parent, and no parent parameter is provided, it will default to 
-    * Phaser.Game.World as the parent transform to use. If that is unavailable the transform fails to take place.
-    *
-    * The `parent` parameter has priority over the actual parent. Use it as a parent override.
-    * Setting it does **not** change the actual parent of this DisplayObject.
-    *
-    * Calling this method updates the `worldTransform`, `worldAlpha`, `worldPosition`, `worldScale` 
-    * and `worldRotation` properties.
-    *
-    * If a `transformCallback` has been specified, it is called at the end of this method, and is passed
-    * the new, updated, worldTransform property, along with the parent transform used.
-    *
-    * @method PIXI.DisplayObject#updateTransform
-    * @param {PIXI.DisplayObject} [parent] - Optional parent to calculate this DisplayObjects transform from.
-    * @return {PIXI.DisplayObject} - A reference to this DisplayObject.
-    */
-    updateTransform: function (parent) {
-
-        if (!parent && !this.parent && !this.game)
-        {
-            return this;
-        }
-
-        var p = this.parent;
-
-        if (parent)
-        {
-            p = parent;
-        }
-        else if (!this.parent)
-        {
-            p = this.game.world;
-        }
-
-        // create some matrix refs for easy access
-        var pt = p.worldTransform;
-        var wt = this.worldTransform;
-
-        // temporary matrix variables
-        var a, b, c, d, tx, ty;
-
-        // so if rotation is between 0 then we can simplify the multiplication process..
-        if (this.rotation % PIXI.PI_2)
-        {
-            // check to see if the rotation is the same as the previous render. This means we only need to use sin and cos when rotation actually changes
-            if (this.rotation !== this.rotationCache)
-            {
-                this.rotationCache = this.rotation;
-                this._sr = Math.sin(this.rotation);
-                this._cr = Math.cos(this.rotation);
-            }
-
-            // get the matrix values of the displayobject based on its transform properties..
-            a  =  this._cr * this.scale.x;
-            b  =  this._sr * this.scale.x;
-            c  = -this._sr * this.scale.y;
-            d  =  this._cr * this.scale.y;
-            tx =  this.position.x;
-            ty =  this.position.y;
-            
-            // check for pivot.. not often used so geared towards that fact!
-            if (this.pivot.x || this.pivot.y)
-            {
-                tx -= this.pivot.x * a + this.pivot.y * c;
-                ty -= this.pivot.x * b + this.pivot.y * d;
-            }
-
-            // concat the parent matrix with the objects transform.
-            wt.a  = a  * pt.a + b  * pt.c;
-            wt.b  = a  * pt.b + b  * pt.d;
-            wt.c  = c  * pt.a + d  * pt.c;
-            wt.d  = c  * pt.b + d  * pt.d;
-            wt.tx = tx * pt.a + ty * pt.c + pt.tx;
-            wt.ty = tx * pt.b + ty * pt.d + pt.ty;
-        }
-        else
-        {
-            // lets do the fast version as we know there is no rotation..
-            a  = this.scale.x;
-            d  = this.scale.y;
-
-            tx = this.position.x - this.pivot.x * a;
-            ty = this.position.y - this.pivot.y * d;
-
-            wt.a  = a  * pt.a;
-            wt.b  = a  * pt.b;
-            wt.c  = d  * pt.c;
-            wt.d  = d  * pt.d;
-            wt.tx = tx * pt.a + ty * pt.c + pt.tx;
-            wt.ty = tx * pt.b + ty * pt.d + pt.ty;
-        }
-
-        //  Set the World values
-        this.worldAlpha = this.alpha * p.worldAlpha;
-        this.worldPosition.set(wt.tx, wt.ty);
-        this.worldScale.set(this.scale.x * Math.sqrt(wt.a * wt.a + wt.c * wt.c), this.scale.y * Math.sqrt(wt.b * wt.b + wt.d * wt.d));
-        this.worldRotation = Math.atan2(-wt.c, wt.d);
-
-        // reset the bounds each time this is called!
-        this._currentBounds = null;
-
-        //  Custom callback?
-        if (this.transformCallback)
-        {
-            this.transformCallback.call(this.transformCallbackContext, wt, pt);
-        }
-
-        return this;
-
-    },
-
-    /**
-    * Sets the root Stage object that this DisplayObject is connected to.
-    *
-    * @method PIXI.DisplayObject#setStageReference
-    * @param {Phaser.Stage} stage - The stage that the object will have as its current stage reference
-    * @return {PIXI.DisplayObject} - A reference to this DisplayObject.
-    */
-    setStageReference: function (stage)
+/**
+ * Destroy this DisplayObject.
+ * Removes all references to transformCallbacks, its parent, the stage, filters, bounds, mask and cached Sprites.
+ *
+ * @method destroy
+ */
+PIXI.DisplayObject.prototype.destroy = function()
+{
+    if (this.children)
     {
-        this.stage = stage;
+        var i = this.children.length;
 
-        return this;
-
-    },
-
-    /**
-    * To be overridden by classes that require it.
-    *
-    * @method PIXI.DisplayObject#preUpdate
-    */
-    preUpdate: function () {
-
-    },
-
-    /**
-    * Generates a RenderTexture based on this DisplayObject, which can they be used to texture other Sprites.
-    * This can be useful if your DisplayObject is static, or complicated, and needs to be reused multiple times.
-    *
-    * Please note that no garbage collection takes place on old textures. It is up to you to destroy old textures,
-    * and references to them, so they don't linger in memory.
-    *
-    * @method PIXI.DisplayObject#generateTexture
-    * @param {number} [resolution=1] - The resolution of the texture being generated.
-    * @param {number} [scaleMode=PIXI.scaleModes.DEFAULT] - See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values.
-    * @param {PIXI.CanvasRenderer|PIXI.WebGLRenderer} renderer - The renderer used to generate the texture.
-    * @return {PIXI.RenderTexture} - A RenderTexture containing an image of this DisplayObject at the time it was invoked.
-    */
-    generateTexture: function (resolution, scaleMode, renderer) {
-
-        var bounds = this.getLocalBounds();
-
-        var renderTexture = new PIXI.RenderTexture(bounds.width | 0, bounds.height | 0, renderer, scaleMode, resolution);
-        
-        PIXI.DisplayObject._tempMatrix.tx = -bounds.x;
-        PIXI.DisplayObject._tempMatrix.ty = -bounds.y;
-        
-        renderTexture.render(this, PIXI.DisplayObject._tempMatrix);
-
-        return renderTexture;
-
-    },
-
-    /**
-    * If this DisplayObject has a cached Sprite, this method generates and updates it.
-    *
-    * @method PIXI.DisplayObject#updateCache
-    * @return {PIXI.DisplayObject} - A reference to this DisplayObject.
-    */
-    updateCache: function () {
-
-        this._generateCachedSprite();
-
-        return this;
-
-    },
-
-    /**
-    * Calculates the global position of this DisplayObject, based on the position given.
-    *
-    * @method PIXI.DisplayObject#toGlobal
-    * @param {PIXI.Point} position - The global position to calculate from.
-    * @return {PIXI.Point} - A point object representing the position of this DisplayObject based on the global position given.
-    */
-    toGlobal: function (position) {
-
-        this.updateTransform();
-
-        return this.worldTransform.apply(position);
-
-    },
-
-    /**
-    * Calculates the local position of this DisplayObject, relative to another point.
-    *
-    * @method PIXI.DisplayObject#toLocal
-    * @param {PIXI.Point} position - The world origin to calculate from.
-    * @param {PIXI.DisplayObject} [from] - An optional DisplayObject to calculate the global position from.
-    * @return {PIXI.Point} - A point object representing the position of this DisplayObject based on the global position given.
-    */
-    toLocal: function (position, from) {
-
-        if (from)
+        while (i--)
         {
-            position = from.toGlobal(position);
+            this.children[i].destroy();
         }
 
-        this.updateTransform();
+        this.children = [];
+    }
 
-        return this.worldTransform.applyInverse(position);
+    this.hitArea = null;
+    this.parent = null;
+    this.stage = null;
+    this.worldTransform = null;
+    this.filterArea = null;
+    this._bounds = null;
+    this._currentBounds = null;
+    this._mask = null;
 
+    //  In case Pixi is still going to try and render it even though destroyed
+    this.renderable = false;
+
+    this._destroyCachedSprite();
+};
+
+/**
+ * [read-only] Indicates if the sprite is globally visible.
+ *
+ * @property worldVisible
+ * @type Boolean
+ */
+Object.defineProperty(PIXI.DisplayObject.prototype, 'worldVisible', {
+
+    get: function() {
+
+        var item = this;
+
+        do
+        {
+            if (!item.visible) return false;
+            item = item.parent;
+        }
+        while(item);
+
+        return true;
+    }
+
+});
+
+/**
+ * Sets a mask for the displayObject. A mask is an object that limits the visibility of an object to the shape of the mask applied to it.
+ * In PIXI a regular mask must be a PIXI.Graphics object. This allows for much faster masking in canvas as it utilises shape clipping.
+ * To remove a mask, set this property to null.
+ *
+ * @property mask
+ * @type Graphics
+ */
+Object.defineProperty(PIXI.DisplayObject.prototype, 'mask', {
+
+    get: function() {
+        return this._mask;
     },
 
-    /**
-    * Internal method.
-    *
-    * @method PIXI.DisplayObject#_renderCachedSprite
-    * @private
-    * @param {Object} renderSession - The render session
-    */
-    _renderCachedSprite: function (renderSession) {
+    set: function(value) {
 
-        this._cachedSprite.worldAlpha = this.worldAlpha;
+        if (this._mask) this._mask.isMask = false;
 
-        if (renderSession.gl)
-        {
-            PIXI.Sprite.prototype._renderWebGL.call(this._cachedSprite, renderSession);
-        }
-        else
-        {
-            PIXI.Sprite.prototype._renderCanvas.call(this._cachedSprite, renderSession);
-        }
+        this._mask = value;
 
+        if (this._mask) this._mask.isMask = true;
+    }
+
+});
+
+/**
+ * Sets the filters for the displayObject.
+ * IMPORTANT: This is a webGL only feature and will be ignored by the Canvas renderer.
+ * 
+ * To remove filters simply set this property to 'null'.
+ * 
+ * You cannot have a filter and a multiply blend mode active at the same time. Setting a filter will reset
+ * this objects blend mode to NORMAL.
+ * 
+ * @property filters
+ * @type Array(Filter)
+ */
+Object.defineProperty(PIXI.DisplayObject.prototype, 'filters', {
+
+    get: function() {
+        return this._filters;
     },
 
-    /**
-    * Internal method.
-    *
-    * @method PIXI.DisplayObject#_generateCachedSprite
-    * @private
-    */
-    _generateCachedSprite: function () {
+    set: function(value) {
 
-        this._cacheAsBitmap = false;
-
-        var bounds = this.getLocalBounds();
-
-        //  Round it off and force non-zero dimensions
-        bounds.width = Math.max(1, Math.ceil(bounds.width));
-        bounds.height = Math.max(1, Math.ceil(bounds.height));
-
-        this.updateTransform();
-
-        if (!this._cachedSprite)
+        if (value)
         {
-            var renderTexture = new PIXI.RenderTexture(bounds.width, bounds.height);
-            this._cachedSprite = new PIXI.Sprite(renderTexture);
-            this._cachedSprite.worldTransform = this.worldTransform;
-        }
-        else
-        {
-            this._cachedSprite.texture.resize(bounds.width, bounds.height);
+            // now put all the passes in one place..
+            var passes = [];
+
+            for (var i = 0; i < value.length; i++)
+            {
+                var filterPasses = value[i].passes;
+
+                for (var j = 0; j < filterPasses.length; j++)
+                {
+                    passes.push(filterPasses[j]);
+                }
+            }
+
+            // TODO change this as it is legacy
+            this._filterBlock = { target: this, filterPasses: passes };
         }
 
-        //  Remove filters
-        var tempFilters = this._filters;
+        this._filters = value;
 
-        this._filters = null;
-        this._cachedSprite.filters = tempFilters;
+        if (this.blendMode && this.blendMode === PIXI.blendModes.MULTIPLY)
+        {
+            this.blendMode = PIXI.blendModes.NORMAL;
+        }
+    }
+});
 
-        PIXI.DisplayObject._tempMatrix.tx = -bounds.x;
-        PIXI.DisplayObject._tempMatrix.ty = -bounds.y;
+/**
+ * Set if this display object is cached as a bitmap.
+ * This basically takes a snap shot of the display object as it is at that moment. It can provide a performance benefit for complex static displayObjects.
+ * To remove simply set this property to 'null'
+ * @property cacheAsBitmap
+ * @type Boolean
+ */
+Object.defineProperty(PIXI.DisplayObject.prototype, 'cacheAsBitmap', {
 
-        this._cachedSprite.texture.render(this, PIXI.DisplayObject._tempMatrix, true);
-        this._cachedSprite.anchor.x = -(bounds.x / bounds.width);
-        this._cachedSprite.anchor.y = -(bounds.y / bounds.height);
-
-        this._filters = tempFilters;
-
-        this._cacheAsBitmap = true;
-
+    get: function() {
+        return  this._cacheAsBitmap;
     },
 
-    /**
-    * Destroys a cached Sprite.
-    *
-    * @method PIXI.DisplayObject#_destroyCachedSprite
-    * @private
-    */
-    _destroyCachedSprite: function () {
+    set: function(value) {
 
-        if (!this._cachedSprite)
+        if (this._cacheAsBitmap === value)
         {
             return;
         }
 
-        this._cachedSprite.texture.destroy(true);
+        if (value)
+        {
+            this._generateCachedSprite();
+        }
+        else
+        {
+            this._destroyCachedSprite();
+        }
 
-        this._cachedSprite = null;
+        this._cacheAsBitmap = value;
+    }
 
+});
+
+/*
+ * Updates the object transform for rendering.
+ *
+ * If the object has no parent, and no parent parameter is provided, it will default to Phaser.Game.World as the parent.
+ * If that is unavailable the transform fails to take place.
+ *
+ * The `parent` parameter has priority over the actual parent. Use it as a parent override.
+ * Setting it does **not** change the actual parent of this DisplayObject, it just uses the parent for the transform update.
+ *
+ * @method updateTransform
+ * @param {DisplayObject} [parent] - Optional parent to parent this DisplayObject transform from.
+ */
+PIXI.DisplayObject.prototype.updateTransform = function(parent)
+{
+    if (!parent && !this.parent && !this.game)
+    {
+        return;
+    }
+
+    var p = this.parent;
+
+    if (parent)
+    {
+        p = parent;
+    }
+    else if (!this.parent)
+    {
+        p = this.game.world;
+    }
+
+    // create some matrix refs for easy access
+    var pt = p.worldTransform;
+    var wt = this.worldTransform;
+
+    // temporary matrix variables
+    var a, b, c, d, tx, ty;
+
+    // so if rotation is between 0 then we can simplify the multiplication process..
+    if (this.rotation % PIXI.PI_2)
+    {
+        // check to see if the rotation is the same as the previous render. This means we only need to use sin and cos when rotation actually changes
+        if (this.rotation !== this.rotationCache)
+        {
+            this.rotationCache = this.rotation;
+            this._sr = Math.sin(this.rotation);
+            this._cr = Math.cos(this.rotation);
+        }
+
+        // get the matrix values of the displayobject based on its transform properties..
+        a  =  this._cr * this.scale.x;
+        b  =  this._sr * this.scale.x;
+        c  = -this._sr * this.scale.y;
+        d  =  this._cr * this.scale.y;
+        tx =  this.position.x;
+        ty =  this.position.y;
+        
+        // check for pivot.. not often used so geared towards that fact!
+        if (this.pivot.x || this.pivot.y)
+        {
+            tx -= this.pivot.x * a + this.pivot.y * c;
+            ty -= this.pivot.x * b + this.pivot.y * d;
+        }
+
+        // concat the parent matrix with the objects transform.
+        wt.a  = a  * pt.a + b  * pt.c;
+        wt.b  = a  * pt.b + b  * pt.d;
+        wt.c  = c  * pt.a + d  * pt.c;
+        wt.d  = c  * pt.b + d  * pt.d;
+        wt.tx = tx * pt.a + ty * pt.c + pt.tx;
+        wt.ty = tx * pt.b + ty * pt.d + pt.ty;
+    }
+    else
+    {
+        // lets do the fast version as we know there is no rotation..
+        a  = this.scale.x;
+        d  = this.scale.y;
+
+        tx = this.position.x - this.pivot.x * a;
+        ty = this.position.y - this.pivot.y * d;
+
+        wt.a  = a  * pt.a;
+        wt.b  = a  * pt.b;
+        wt.c  = d  * pt.c;
+        wt.d  = d  * pt.d;
+        wt.tx = tx * pt.a + ty * pt.c + pt.tx;
+        wt.ty = tx * pt.b + ty * pt.d + pt.ty;
+    }
+
+    // multiply the alphas..
+    this.worldAlpha = this.alpha * p.worldAlpha;
+
+    this.worldPosition.set(wt.tx, wt.ty);
+    this.worldScale.set(wt.a, wt.d);
+    this.worldRotation = Math.atan2(wt.c, wt.d);
+
+    // reset the bounds each time this is called!
+    this._currentBounds = null;
+
+    //  Custom callback?
+    if (this.transformCallback)
+    {
+        this.transformCallback.call(this.transformCallbackContext, wt, pt);
     }
 
 };
 
-//  Alias for updateTransform. As used in DisplayObject container, etc.
+// performance increase to avoid using call.. (10x faster)
 PIXI.DisplayObject.prototype.displayObjectUpdateTransform = PIXI.DisplayObject.prototype.updateTransform;
 
-Object.defineProperties(PIXI.DisplayObject.prototype, {
+/**
+ * Retrieves the bounds of the displayObject as a rectangle object
+ *
+ * @method getBounds
+ * @param matrix {Matrix}
+ * @return {Rectangle} the rectangular bounding area
+ */
+PIXI.DisplayObject.prototype.getBounds = function(matrix)
+{
+    matrix = matrix;//just to get passed js hinting (and preserve inheritance)
+    return PIXI.EmptyRectangle;
+};
 
-    /**
-    * The horizontal position of the DisplayObject, in pixels, relative to its parent.
-    * If you need the world position of the DisplayObject, use `DisplayObject.worldPosition` instead.
-    * @name PIXI.DisplayObject#x
-    * @property {number} x - The horizontal position of the DisplayObject, in pixels, relative to its parent.
-    */
-    'x': {
+/**
+ * Retrieves the local bounds of the displayObject as a rectangle object
+ *
+ * @method getLocalBounds
+ * @return {Rectangle} the rectangular bounding area
+ */
+PIXI.DisplayObject.prototype.getLocalBounds = function()
+{
+    return this.getBounds(PIXI.identityMatrix);///PIXI.EmptyRectangle();
+};
 
-        get: function () {
+/**
+ * Sets the object's stage reference, the stage this object is connected to
+ *
+ * @method setStageReference
+ * @param stage {Stage} the stage that the object will have as its current stage reference
+ */
+PIXI.DisplayObject.prototype.setStageReference = function(stage)
+{
+    this.stage = stage;
+};
 
-            return this.position.x;
+/**
+ * Empty, to be overridden by classes that require it.
+ *
+ * @method preUpdate
+ */
+PIXI.DisplayObject.prototype.preUpdate = function()
+{
+};
 
-        },
+/**
+ * Useful function that returns a texture of the displayObject object that can then be used to create sprites
+ * This can be quite useful if your displayObject is static / complicated and needs to be reused multiple times.
+ *
+ * @method generateTexture
+ * @param resolution {Number} The resolution of the texture being generated
+ * @param scaleMode {Number} See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values
+ * @param renderer {CanvasRenderer|WebGLRenderer} The renderer used to generate the texture.
+ * @return {RenderTexture} a texture of the graphics object
+ */
+PIXI.DisplayObject.prototype.generateTexture = function(resolution, scaleMode, renderer)
+{
+    var bounds = this.getLocalBounds();
 
-        set: function (value) {
+    var renderTexture = new PIXI.RenderTexture(bounds.width | 0, bounds.height | 0, renderer, scaleMode, resolution);
+    
+    PIXI.DisplayObject._tempMatrix.tx = -bounds.x;
+    PIXI.DisplayObject._tempMatrix.ty = -bounds.y;
+    
+    renderTexture.render(this, PIXI.DisplayObject._tempMatrix);
 
-            this.position.x = value;
+    return renderTexture;
+};
 
-        }
+/**
+ * Generates and updates the cached sprite for this object.
+ *
+ * @method updateCache
+ */
+PIXI.DisplayObject.prototype.updateCache = function()
+{
+    this._generateCachedSprite();
+};
 
+/**
+ * Calculates the global position of the display object
+ *
+ * @method toGlobal
+ * @param position {Point} The world origin to calculate from
+ * @return {Point} A point object representing the position of this object
+ */
+PIXI.DisplayObject.prototype.toGlobal = function(position)
+{
+    // don't need to u[date the lot
+    this.displayObjectUpdateTransform();
+    return this.worldTransform.apply(position);
+};
+
+/**
+ * Calculates the local position of the display object relative to another point
+ *
+ * @method toLocal
+ * @param position {Point} The world origin to calculate from
+ * @param [from] {DisplayObject} The DisplayObject to calculate the global position from
+ * @return {Point} A point object representing the position of this object
+ */
+PIXI.DisplayObject.prototype.toLocal = function(position, from)
+{
+    if (from)
+    {
+        position = from.toGlobal(position);
+    }
+
+    // don't need to u[date the lot
+    this.displayObjectUpdateTransform();
+
+    return this.worldTransform.applyInverse(position);
+};
+
+/**
+ * Internal method.
+ *
+ * @method _renderCachedSprite
+ * @param renderSession {Object} The render session
+ * @private
+ */
+PIXI.DisplayObject.prototype._renderCachedSprite = function(renderSession)
+{
+    this._cachedSprite.worldAlpha = this.worldAlpha;
+
+    if (renderSession.gl)
+    {
+        PIXI.Sprite.prototype._renderWebGL.call(this._cachedSprite, renderSession);
+    }
+    else
+    {
+        PIXI.Sprite.prototype._renderCanvas.call(this._cachedSprite, renderSession);
+    }
+};
+
+/**
+ * Internal method.
+ *
+ * @method _generateCachedSprite
+ * @private
+ */
+PIXI.DisplayObject.prototype._generateCachedSprite = function()
+{
+    this._cacheAsBitmap = false;
+
+    var bounds = this.getLocalBounds();
+
+    //  Round it off and force non-zero dimensions
+    bounds.width = Math.max(1, Math.ceil(bounds.width));
+    bounds.height = Math.max(1, Math.ceil(bounds.height));
+
+    this.updateTransform();
+
+    if (!this._cachedSprite)
+    {
+        var renderTexture = new PIXI.RenderTexture(bounds.width, bounds.height);
+        this._cachedSprite = new PIXI.Sprite(renderTexture);
+        this._cachedSprite.worldTransform = this.worldTransform;
+    }
+    else
+    {
+        this._cachedSprite.texture.resize(bounds.width, bounds.height);
+    }
+
+    //  Remove filters
+    var tempFilters = this._filters;
+    this._filters = null;
+    this._cachedSprite.filters = tempFilters;
+
+    // PIXI.DisplayObject._tempMatrix.identity();
+    PIXI.DisplayObject._tempMatrix.tx = -bounds.x;
+    PIXI.DisplayObject._tempMatrix.ty = -bounds.y;
+
+    this._cachedSprite.texture.render(this, PIXI.DisplayObject._tempMatrix, true);
+    this._cachedSprite.anchor.x = -(bounds.x / bounds.width);
+    this._cachedSprite.anchor.y = -(bounds.y / bounds.height);
+
+    this._filters = tempFilters;
+
+    this._cacheAsBitmap = true;
+};
+
+/**
+* Destroys the cached sprite.
+*
+* @method _destroyCachedSprite
+* @private
+*/
+PIXI.DisplayObject.prototype._destroyCachedSprite = function()
+{
+    if (!this._cachedSprite) return;
+
+    this._cachedSprite.texture.destroy(true);
+
+    // TODO could be object pooled!
+    this._cachedSprite = null;
+};
+
+/**
+* Renders the object using the WebGL renderer
+*
+* @method _renderWebGL
+* @param renderSession {RenderSession}
+* @private
+*/
+PIXI.DisplayObject.prototype._renderWebGL = function(renderSession)
+{
+    // OVERWRITE;
+    // this line is just here to pass jshinting :)
+    renderSession = renderSession;
+};
+
+/**
+* Renders the object using the Canvas renderer
+*
+* @method _renderCanvas
+* @param renderSession {RenderSession}
+* @private
+*/
+PIXI.DisplayObject.prototype._renderCanvas = function(renderSession)
+{
+    // OVERWRITE;
+    // this line is just here to pass jshinting :)
+    renderSession = renderSession;
+};
+
+/**
+ * The position of the displayObject on the x axis relative to the local coordinates of the parent.
+ *
+ * @property x
+ * @type Number
+ */
+Object.defineProperty(PIXI.DisplayObject.prototype, 'x', {
+
+    get: function() {
+        return  this.position.x;
     },
 
-    /**
-    * The vertical position of the DisplayObject, in pixels, relative to its parent.
-    * If you need the world position of the DisplayObject, use `DisplayObject.worldPosition` instead.
-    * @name PIXI.DisplayObject#y
-    * @property {number} y - The vertical position of the DisplayObject, in pixels, relative to its parent.
-    */
-    'y': {
+    set: function(value) {
+        this.position.x = value;
+    }
 
-        get: function () {
+});
 
-            return this.position.y;
+/**
+ * The position of the displayObject on the y axis relative to the local coordinates of the parent.
+ *
+ * @property y
+ * @type Number
+ */
+Object.defineProperty(PIXI.DisplayObject.prototype, 'y', {
 
-        },
-
-        set: function (value) {
-
-            this.position.y = value;
-
-        }
-
+    get: function() {
+        return  this.position.y;
     },
 
-    /**
-    * Indicates if this DisplayObject is visible, based on it, and all of its parents, `visible` property values.
-    * @name PIXI.DisplayObject#worldVisible
-    * @property {boolean} worldVisible - Indicates if this DisplayObject is visible, based on it, and all of its parents, `visible` property values.
-    */
-    'worldVisible': {
-
-        get: function () {
-
-            if (!this.visible)
-            {
-                return false;
-            }
-            else
-            {
-                var item = this.parent;
-
-                do
-                {
-                    if (!item.visible)
-                    {
-                        return false;
-                    }
-
-                    item = item.parent;
-                }
-                while (item);
-
-                return true;
-            }
-
-        }
-
-    },
-
-    /**
-    * Sets a mask for this DisplayObject. A mask is an instance of a Graphics object.
-    * When applied it limits the visible area of this DisplayObject to the shape of the mask.
-    * Under a Canvas renderer it uses shape clipping. Under a WebGL renderer it uses a Stencil Buffer.
-    * To remove a mask, set this property to `null`.
-    * 
-    * @name PIXI.DisplayObject#mask
-    * @property {PIXI.Graphics} mask - The mask applied to this DisplayObject. Set to `null` to remove an existing mask.
-    */
-    'mask': {
-
-        get: function () {
-
-            return this._mask;
-
-        },
-
-        set: function (value) {
-
-            if (this._mask)
-            {
-                this._mask.isMask = false;
-            }
-
-            this._mask = value;
-
-            if (value)
-            {
-                this._mask.isMask = true;
-            }
-
-        }
-
-    },
-
-    /**
-    * Sets the filters for this DisplayObject. This is a WebGL only feature, and is ignored by the Canvas
-    * Renderer. A filter is a shader applied to this DisplayObject. You can modify the placement of the filter
-    * using `DisplayObject.filterArea`.
-    * 
-    * To remove filters, set this property to `null`.
-    *
-    * Note: You cannot have a filter set, and a MULTIPLY Blend Mode active, at the same time. Setting a 
-    * filter will reset this DisplayObjects blend mode to NORMAL.
-    * 
-    * @name PIXI.DisplayObject#filters
-    * @property {Array} filters - An Array of PIXI.AbstractFilter objects, or objects that extend them.
-    */
-    'filters': {
-
-        get: function () {
-
-            return this._filters;
-
-        },
-
-        set: function (value) {
-
-            if (Array.isArray(value))
-            {
-                //  Put all the passes in one place.
-                var passes = [];
-
-                for (var i = 0; i < value.length; i++)
-                {
-                    var filterPasses = value[i].passes;
-
-                    for (var j = 0; j < filterPasses.length; j++)
-                    {
-                        passes.push(filterPasses[j]);
-                    }
-                }
-
-                //  Needed any more?
-                this._filterBlock = { target: this, filterPasses: passes };
-            }
-
-            this._filters = value;
-
-            if (this.blendMode && this.blendMode === PIXI.blendModes.MULTIPLY)
-            {
-                this.blendMode = PIXI.blendModes.NORMAL;
-            }
-
-        }
-
-    },
-
-    /**
-    * Sets if this DisplayObject should be cached as a bitmap.
-    *
-    * When invoked it will take a snapshot of the DisplayObject, as it is at that moment, and store it 
-    * in a RenderTexture. This is then used whenever this DisplayObject is rendered. It can provide a
-    * performance benefit for complex, but static, DisplayObjects. I.e. those with lots of children.
-    *
-    * Cached Bitmaps do not track their parents. If you update a property of this DisplayObject, it will not
-    * re-generate the cached bitmap automatically. To do that you need to call `DisplayObject.updateCache`.
-    * 
-    * To remove a cached bitmap, set this property to `null`.
-    * 
-    * @name PIXI.DisplayObject#cacheAsBitmap
-    * @property {boolean} cacheAsBitmap - Cache this DisplayObject as a Bitmap. Set to `null` to remove an existing cached bitmap.
-    */
-    'cacheAsBitmap': {
-
-        get: function () {
-
-            return this._cacheAsBitmap;
-
-        },
-
-        set: function (value) {
-
-            if (this._cacheAsBitmap === value)
-            {
-                return;
-            }
-
-            if (value)
-            {
-                this._generateCachedSprite();
-            }
-            else
-            {
-                this._destroyCachedSprite();
-            }
-
-            this._cacheAsBitmap = value;
-
-        }
-
+    set: function(value) {
+        this.position.y = value;
     }
 
 });
@@ -1003,17 +937,6 @@ PIXI.DisplayObjectContainer = function()
      * @readOnly
      */
     this.children = [];
-
-    /**
-    * If `ignoreChildInput`  is `false` it will allow this objects _children_ to be considered as valid for Input events.
-    * 
-    * If this property is `true` then the children will _not_ be considered as valid for Input events.
-    * 
-    * Note that this property isn't recursive: only immediate children are influenced, it doesn't scan further down.
-    * @property {boolean} ignoreChildInput
-    * @default
-    */
-    this.ignoreChildInput = false;
     
 };
 
@@ -1308,8 +1231,6 @@ PIXI.DisplayObjectContainer.prototype.getBounds = function()
     {
         return PIXI.EmptyRectangle;
     }
-
-    this.updateTransform();
 
     var minX = Infinity;
     var minY = Infinity;
@@ -1619,15 +1540,6 @@ PIXI.Sprite = function(texture)
      */
     this.shader = null;
 
-    /**
-    * Controls if this Sprite is processed by the core Phaser game loops and Group loops.
-    *
-    * @property exists
-    * @type Boolean
-    * @default true
-    */
-    this.exists = true;
-
     if (this.texture.baseTexture.hasLoaded)
     {
         this.onTextureUpdate();
@@ -1764,7 +1676,7 @@ PIXI.Sprite.prototype.getBounds = function(matrix)
             a *= -1;
             var temp = w0;
             w0 = -w1;
-            w1 = -temp; 
+            w1 = -temp;
         }
 
         if (d < 0)
@@ -1772,11 +1684,11 @@ PIXI.Sprite.prototype.getBounds = function(matrix)
             d *= -1;
             var temp = h0;
             h0 = -h1;
-            h1 = -temp; 
+            h1 = -temp;
         }
 
         // this means there is no rotation going on right? RIGHT?
-        // if thats the case then we can avoid checking the bound values! yay         
+        // if thats the case then we can avoid checking the bound values! yay
         minX = a * w1 + tx;
         maxX = a * w0 + tx;
         minY = d * h1 + ty;
@@ -1943,7 +1855,7 @@ PIXI.Sprite.prototype._renderCanvas = function(renderSession, matrix)
 
         renderSession.context.globalAlpha = this.worldAlpha;
 
-        //  If smoothingEnabled is supported and we need to change the smoothing property for this texture
+         //  If smoothingEnabled is supported and we need to change the smoothing property for this texture
         if (renderSession.smoothProperty && renderSession.scaleMode !== this.texture.baseTexture.scaleMode)
         {
             renderSession.scaleMode = this.texture.baseTexture.scaleMode;
@@ -2007,19 +1919,57 @@ PIXI.Sprite.prototype._renderCanvas = function(renderSession, matrix)
 
 };
 
+// some helper functions..
+
+/**
+ *
+ * Helper function that creates a sprite that will contain a texture from the TextureCache based on the frameId
+ * The frame ids are created when a Texture packer file has been loaded
+ *
+ * @method fromFrame
+ * @static
+ * @param frameId {String} The frame Id of the texture in the cache
+ * @return {Sprite} A new Sprite using a texture from the texture cache matching the frameId
+ */
+PIXI.Sprite.fromFrame = function(frameId)
+{
+    var texture = PIXI.TextureCache[frameId];
+
+    if (!texture) throw new Error('The frameId "' + frameId + '" does not exist in the texture cache' + this);
+
+    return new PIXI.Sprite(texture);
+};
+
+/**
+ *
+ * Helper function that creates a sprite that will contain a texture based on an image url
+ * If the image is not in the texture cache it will be loaded
+ *
+ * @method fromImage
+ * @static
+ * @param imageId {String} The image url of the texture
+ * @return {Sprite} A new Sprite using a texture from the texture cache matching the image id
+ */
+PIXI.Sprite.fromImage = function(imageId, crossorigin, scaleMode)
+{
+    var texture = PIXI.Texture.fromImage(imageId, crossorigin, scaleMode);
+
+    return new PIXI.Sprite(texture);
+};
+
 /**
  * @author Mat Groves http://matgroves.com/
  */
 
 /**
- * The SpriteBatch class is a really fast version of the DisplayObjectContainer 
+ * The SpriteBatch class is a really fast version of the DisplayObjectContainer
  * built solely for speed, so use when you need a lot of sprites or particles.
- * And it's extremely easy to use : 
+ * And it's extremely easy to use :
 
     var container = new PIXI.SpriteBatch();
- 
+
     stage.addChild(container);
- 
+
     for(var i  = 0; i < 100; i++)
     {
         var sprite = new PIXI.Sprite.fromImage("myImage.png");
@@ -2074,7 +2024,7 @@ PIXI.SpriteBatch.prototype.updateTransform = function()
 * Renders the object using the WebGL renderer
 *
 * @method _renderWebGL
-* @param renderSession {RenderSession} 
+* @param renderSession {RenderSession}
 * @private
 */
 PIXI.SpriteBatch.prototype._renderWebGL = function(renderSession)
@@ -2085,34 +2035,34 @@ PIXI.SpriteBatch.prototype._renderWebGL = function(renderSession)
     {
         this.initWebGL(renderSession.gl);
     }
-    
+
     if (this.fastSpriteBatch.gl !== renderSession.gl)
     {
         this.fastSpriteBatch.setContext(renderSession.gl);
     }
 
     renderSession.spriteBatch.stop();
-    
+
     renderSession.shaderManager.setShader(renderSession.shaderManager.fastShader);
-    
+
     this.fastSpriteBatch.begin(this, renderSession);
     this.fastSpriteBatch.render(this);
 
     renderSession.spriteBatch.start();
- 
+
 };
 
 /**
 * Renders the object using the Canvas renderer
 *
 * @method _renderCanvas
-* @param renderSession {RenderSession} 
+* @param renderSession {RenderSession}
 * @private
 */
 PIXI.SpriteBatch.prototype._renderCanvas = function(renderSession)
 {
     if (!this.visible || this.alpha <= 0 || !this.children.length) return;
-    
+
     var context = renderSession.context;
 
     context.globalAlpha = this.worldAlpha;
@@ -2120,7 +2070,7 @@ PIXI.SpriteBatch.prototype._renderCanvas = function(renderSession)
     this.displayObjectUpdateTransform();
 
     var transform = this.worldTransform;
-       
+
     var isRotated = true;
 
     for (var i = 0; i < this.children.length; i++)
@@ -2156,15 +2106,15 @@ PIXI.SpriteBatch.prototype._renderCanvas = function(renderSession)
         else
         {
             if (!isRotated) isRotated = true;
-    
+
             child.displayObjectUpdateTransform();
-           
+
             var childTransform = child.worldTransform;
             var tx = (childTransform.tx * renderSession.resolution) + renderSession.shakeX;
             var ty = (childTransform.ty * renderSession.resolution) + renderSession.shakeY;
 
             // allow for trimming
-           
+
             if (renderSession.roundPixels)
             {
                 context.setTransform(childTransform.a, childTransform.b, childTransform.c, childTransform.d, tx | 0, ty | 0);
@@ -2191,7 +2141,7 @@ PIXI.SpriteBatch.prototype._renderCanvas = function(renderSession)
 /**
  * @author Mat Groves http://matgroves.com/ @Doormat23
  */
- 
+
 /**
  * Converts a hex color number to an [R, G, B] array
  *
@@ -2275,12 +2225,31 @@ PIXI.getNextPowerOfTwo = function(number)
  * @method isPowerOfTwo
  * @param width {Number}
  * @param height {Number}
- * @return {Boolean} 
+ * @return {Boolean}
  */
 PIXI.isPowerOfTwo = function(width, height)
 {
     return (width > 0 && (width & (width - 1)) === 0 && height > 0 && (height & (height - 1)) === 0);
 
+};
+
+/**
+ * get the resolution of an asset by looking for the prefix
+ * used by spritesheets and image urls
+ *
+ * @param url {string} the image path
+ * @return {number}
+ */
+PIXI.getResolutionOfUrl = function (url)
+{
+    var resolution = /@(.+)x/.exec(url);
+
+    if (resolution)
+    {
+        return parseFloat(resolution[1]);
+    }
+
+    return 1;
 };
 
 /**
@@ -2353,7 +2322,7 @@ PIXI.CanvasPool = {
 
         for (var i = 0; i < pool.length; i++)
         {
-            if (!pool[i].parent)
+            if (pool[i].parent === null)
             {
                 return i;
             }
@@ -2379,8 +2348,6 @@ PIXI.CanvasPool = {
             if (pool[i].parent === parent)
             {
                 pool[i].parent = null;
-                pool[i].canvas.width = 1;
-                pool[i].canvas.height = 1;
             }
         }
 
@@ -2402,8 +2369,6 @@ PIXI.CanvasPool = {
             if (pool[i].canvas === canvas)
             {
                 pool[i].parent = null;
-                pool[i].canvas.width = 1;
-                pool[i].canvas.height = 1;
             }
         }
 
@@ -2423,7 +2388,7 @@ PIXI.CanvasPool = {
 
         for (var i = 0; i < pool.length; i++)
         {
-            if (pool[i].parent)
+            if (pool[i].parent !== null)
             {
                 c++;
             }
@@ -2447,7 +2412,7 @@ PIXI.CanvasPool = {
 
         for (var i = 0; i < pool.length; i++)
         {
-            if (!pool[i].parent)
+            if (pool[i].parent === null)
             {
                 c++;
             }
@@ -3730,6 +3695,9 @@ PIXI.WebGLRenderer.prototype.render = function(stage)
         return;
     }
 
+    // update the scene graph
+    stage.updateTransform();
+
     var gl = this.gl;
 
     // -- Does this need to be set every frame? -- //
@@ -4543,11 +4511,11 @@ PIXI.WebGLShaderManager.prototype.destroy = function()
 
 /**
  * @author Mat Groves
- * 
+ *
  * Big thanks to the very clever Matt DesLauriers <mattdesl> https://github.com/mattdesl/
  * for creating the original pixi version!
  * Also a thanks to https://github.com/bchevalier for tweaking the tint and alpha so that they now share 4 bytes on the vertex buffer
- * 
+ *
  * Heavily inspired by LibGDX's WebGLSpriteBatch:
  * https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/graphics/g2d/WebGLSpriteBatch.java
  */
@@ -4609,7 +4577,7 @@ PIXI.WebGLSpriteBatch = function()
      * @type Uint16Array
      */
     this.indices = new PIXI.Uint16Array(numIndices);
-    
+
     /**
      * @property lastIndexCount
      * @type Number
@@ -4752,6 +4720,7 @@ PIXI.WebGLSpriteBatch.prototype.render = function(sprite, matrix)
 
     //  They provided an alternative rendering matrix, so use it
     var wt = sprite.worldTransform;
+    var wt = sprite.worldTransform;
 
     if (matrix)
     {
@@ -4778,7 +4747,7 @@ PIXI.WebGLSpriteBatch.prototype.render = function(sprite, matrix)
     var aY = sprite.anchor.y;
 
     var w0, w1, h0, h1;
-        
+
     if (texture.trim)
     {
         // if the sprite is trimmed then we need to add the extra space before transforming the sprite coords.
@@ -4848,7 +4817,7 @@ PIXI.WebGLSpriteBatch.prototype.render = function(sprite, matrix)
         positions[i+15] = a * w1 + c * h0 + tx;
         positions[i+16] = d * h0 + b * w1 + ty;
     }
-    
+
     // uv
     positions[i+2] = uvs.x0;
     positions[i+3] = uvs.y0;
@@ -4877,7 +4846,7 @@ PIXI.WebGLSpriteBatch.prototype.render = function(sprite, matrix)
 
 /**
 * Renders a TilingSprite using the spriteBatch.
-* 
+*
 * @method renderTilingSprite
 * @param sprite {TilingSprite} the sprite to render
 */
@@ -4979,7 +4948,7 @@ PIXI.WebGLSpriteBatch.prototype.renderTilingSprite = function(sprite)
     positions[i++] = uvs.y1;
     // color
     colors[i++] = color;
-    
+
     // xy
     positions[i++] = a * w0 + c * h0 + tx;
     positions[i++] = d * h0 + b * w0 + ty;
@@ -5040,7 +5009,7 @@ PIXI.WebGLSpriteBatch.prototype.flush = function()
         gl.vertexAttribPointer(shader.colorAttribute, 4, gl.UNSIGNED_BYTE, true, stride, 4 * 4);
     }
 
-    // upload the verts to the buffer  
+    // upload the verts to the buffer
     if (this.currentBatchSize > (this.size * 0.5))
     {
         gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.vertices);
@@ -5064,7 +5033,7 @@ PIXI.WebGLSpriteBatch.prototype.flush = function()
     var sprite;
 
     for (var i = 0, j = this.currentBatchSize; i < j; i++) {
-        
+
         sprite = this.sprites[i];
 
         if (sprite.tilingTexture)
@@ -5106,7 +5075,7 @@ PIXI.WebGLSpriteBatch.prototype.flush = function()
             if (shaderSwap)
             {
                 currentShader = nextShader;
-                
+
                 shader = currentShader.shaders[gl.id];
 
                 if (!shader)
@@ -5127,7 +5096,7 @@ PIXI.WebGLSpriteBatch.prototype.flush = function()
                 {
                     shader.syncUniforms();
                 }
-                
+
                 // both these only need to be set if they are changing..
                 // set the projection
                 var projection = this.renderSession.projection;
@@ -5182,7 +5151,7 @@ PIXI.WebGLSpriteBatch.prototype.renderBatch = function(texture, size, startIndex
 
     // now draw those suckas!
     gl.drawElements(gl.TRIANGLES, size * 6, gl.UNSIGNED_SHORT, startIndex * 6 * 2);
-    
+
     // increment the draw count
     this.renderSession.drawCount++;
 };
@@ -5206,21 +5175,22 @@ PIXI.WebGLSpriteBatch.prototype.start = function()
 
 /**
 * Destroys the SpriteBatch.
-* 
+*
 * @method destroy
 */
 PIXI.WebGLSpriteBatch.prototype.destroy = function()
 {
     this.vertices = null;
     this.indices = null;
-    
+
     this.gl.deleteBuffer(this.vertexBuffer);
     this.gl.deleteBuffer(this.indexBuffer);
-    
+
     this.currentBaseTexture = null;
-    
+
     this.gl = null;
 };
+
 /**
  * @author Mat Groves
  * 
@@ -6710,6 +6680,8 @@ PIXI.CanvasRenderer.prototype.constructor = PIXI.CanvasRenderer;
  */
 PIXI.CanvasRenderer.prototype.render = function (stage) {
 
+    stage.updateTransform();
+
     this.context.setTransform(1, 0, 0, 1, 0, 0);
 
     this.context.globalAlpha = 1;
@@ -6851,25 +6823,32 @@ PIXI.CanvasRenderer.prototype.mapBlendModes = function () {
  * @author Mat Groves http://matgroves.com/ @Doormat23
  */
 
+PIXI.BaseTextureCache = {};
+
+PIXI.BaseTextureCacheIdGenerator = 0;
+
 /**
  * A texture stores the information that represents an image. All textures have a base texture.
  *
  * @class BaseTexture
  * @uses EventTarget
  * @constructor
- * @param source {String|Canvas} the source object (image or canvas)
+ * @param source {String} the source object (image or canvas)
  * @param scaleMode {Number} See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values
+ * @param resolution {number} the resolution of the texture for devices with different pixel ratios
  */
-PIXI.BaseTexture = function(source, scaleMode)
+PIXI.BaseTexture = function(source, scaleMode, resolution)
 {
     /**
-     * The Resolution of the texture. 
+     * The Resolution of the texture.
      *
      * @property resolution
      * @type Number
      */
     this.resolution = 1;
-    
+
+    this.realResolution = resolution || 1;
+
     /**
      * [read-only] The width of the base texture set when the image has loaded
      *
@@ -6889,8 +6868,24 @@ PIXI.BaseTexture = function(source, scaleMode)
     this.height = 100;
 
     /**
+     * Used to store the actual width of the source of this texture
+     *
+     * @member {number}
+     * @readOnly
+     */
+    this.realWidth = 100;
+
+    /**
+     * Used to store the actual height of the source of this texture
+     *
+     * @member {number}
+     * @readOnly
+     */
+    this.realHeight = 100;
+
+    /**
      * The scale mode to apply when scaling this texture
-     * 
+     *
      * @property scaleMode
      * @type {Number}
      * @default PIXI.scaleModes.LINEAR
@@ -6914,6 +6909,8 @@ PIXI.BaseTexture = function(source, scaleMode)
      */
     this.source = source;
 
+    this._UID = PIXI._UID++;
+
     /**
      * Controls if RGB channels should be pre-multiplied by Alpha  (WebGL only)
      *
@@ -6935,7 +6932,7 @@ PIXI.BaseTexture = function(source, scaleMode)
     /**
      * Set this to true if a mipmap of this texture needs to be generated. This value needs to be set before the texture is used
      * Also the texture must be a power of two size to work
-     * 
+     *
      * @property mipmap
      * @type {Boolean}
      */
@@ -6956,21 +6953,32 @@ PIXI.BaseTexture = function(source, scaleMode)
     if ((this.source.complete || this.source.getContext) && this.source.width && this.source.height)
     {
         this.hasLoaded = true;
-        this.width = this.source.naturalWidth || this.source.width;
-        this.height = this.source.naturalHeight || this.source.height;
+
+        this.realWidth = this.source.naturalWidth || this.source.width;
+        this.realHeight = this.source.naturalHeight || this.source.height;
+
+        this.width = this.realWidth / this.realResolution;
+        this.height = this.realHeight / this.realResolution;
+
         this.dirty();
     }
 
     /**
      * A BaseTexture can be set to skip the rendering phase in the WebGL Sprite Batch.
-     * 
+     *
      * You may want to do this if you have a parent Sprite with no visible texture (i.e. uses the internal `__default` texture)
      * that has children that you do want to render, without causing a batch flush in the process.
-     * 
+     *
      * @property skipRender
      * @type Boolean
      */
     this.skipRender = false;
+
+    /**
+     * @property imageUrl
+     * @type String
+     */
+    this.imageUrl = null;
 
     /**
      * @property _powerOf2
@@ -6998,6 +7006,7 @@ PIXI.BaseTexture.prototype.forceLoaded = function(width, height)
     this.width = width;
     this.height = height;
     this.dirty();
+
 };
 
 /**
@@ -7007,9 +7016,23 @@ PIXI.BaseTexture.prototype.forceLoaded = function(width, height)
  */
 PIXI.BaseTexture.prototype.destroy = function()
 {
-    if (this.source)
+    if (this.imageUrl)
+    {
+        delete PIXI.BaseTextureCache[this.imageUrl];
+        delete PIXI.TextureCache[this.imageUrl];
+
+        this.imageUrl = null;
+
+        if (!navigator.isCocoonJS) this.source.src = '';
+    }
+    else if (this.source)
     {
         PIXI.CanvasPool.removeByCanvas(this.source);
+
+        if (this.source._pixiId)
+        {
+            delete PIXI.BaseTextureCache[this.source._pixiId];
+        }
     }
 
     this.source = null;
@@ -7022,11 +7045,12 @@ PIXI.BaseTexture.prototype.destroy = function()
  *
  * @method updateSourceImage
  * @param newSrc {String} the path of the image
- * @deprecated This method is deprecated. Please use Phaser.Sprite.loadTexture instead.
  */
 PIXI.BaseTexture.prototype.updateSourceImage = function(newSrc)
 {
-    console.warn("PIXI.BaseTexture.updateSourceImage is deprecated. Use Phaser.Sprite.loadTexture instead.");
+    this.hasLoaded = false;
+    this.source.src = null;
+    this.source.src = newSrc;
 };
 
 /**
@@ -7062,12 +7086,55 @@ PIXI.BaseTexture.prototype.unloadFromGPU = function()
         {
             gl.deleteTexture(glTexture);
         }
-        
+
     }
 
     this._glTextures.length = 0;
 
     this.dirty();
+};
+
+/**
+ * Helper function that creates a base texture from the given image url.
+ * If the image is not in the base texture cache it will be created and loaded.
+ *
+ * @static
+ * @method fromImage
+ * @param imageUrl {String} The image url of the texture
+ * @param crossorigin {Boolean}
+ * @param scaleMode {Number} See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values
+ * @return {BaseTexture}
+ */
+PIXI.BaseTexture.fromImage = function(imageUrl, crossorigin, scaleMode, resolution)
+{
+    var baseTexture = PIXI.BaseTextureCache[imageUrl];
+
+    if(crossorigin === undefined && imageUrl.indexOf('data:') === -1) crossorigin = true;
+
+    if(!baseTexture)
+    {
+        // new Image() breaks tex loading in some versions of Chrome.
+        // See https://code.google.com/p/chromium/issues/detail?id=238071
+        var image = new Image();
+
+        if (crossorigin)
+        {
+            image.crossOrigin = '';
+        }
+
+        image.src = imageUrl;
+        baseTexture = new PIXI.BaseTexture(image, scaleMode, resolution);
+        baseTexture.imageUrl = imageUrl;
+        PIXI.BaseTextureCache[imageUrl] = baseTexture;
+
+        // if there is an @2x at the end of the url we are going to assume its a highres image
+        if( imageUrl.indexOf(PIXI.RETINA_PREFIX + '.') !== -1)
+        {
+            baseTexture.resolution = 2;
+        }
+    }
+
+    return baseTexture;
 };
 
 /**
@@ -7081,6 +7148,11 @@ PIXI.BaseTexture.prototype.unloadFromGPU = function()
  */
 PIXI.BaseTexture.fromCanvas = function(canvas, scaleMode)
 {
+    if (!canvas._pixiId)
+    {
+        canvas._pixiId = 'canvas_' + PIXI.TextureCacheIdGenerator++;
+    }
+
     if (canvas.width === 0)
     {
         canvas.width = 1;
@@ -7091,12 +7163,23 @@ PIXI.BaseTexture.fromCanvas = function(canvas, scaleMode)
         canvas.height = 1;
     }
 
-    return new PIXI.BaseTexture(canvas, scaleMode);
+    var baseTexture = PIXI.BaseTextureCache[canvas._pixiId];
+
+    if (!baseTexture)
+    {
+        baseTexture = new PIXI.BaseTexture(canvas, scaleMode);
+        PIXI.BaseTextureCache[canvas._pixiId] = baseTexture;
+    }
+
+    return baseTexture;
 };
 
 /**
  * @author Mat Groves http://matgroves.com/ @Doormat23
  */
+
+PIXI.TextureCache = {};
+PIXI.FrameCache = {};
 
 /**
  * TextureSilentFail is a boolean that defaults to `false`. 
@@ -7106,6 +7189,8 @@ PIXI.BaseTexture.fromCanvas = function(canvas, scaleMode)
  * @type {boolean}
  */
 PIXI.TextureSilentFail = false;
+
+PIXI.TextureCacheIdGenerator = 0;
 
 /**
  * A texture stores the information that represents an image or part of an image. It cannot be added
@@ -7343,6 +7428,46 @@ PIXI.Texture.prototype._updateUvs = function()
 };
 
 /**
+ * Helper function that creates a Texture object from the given image url.
+ * If the image is not in the texture cache it will be  created and loaded.
+ *
+ * @static
+ * @method fromImage
+ * @param imageUrl {String} The image url of the texture
+ * @param crossorigin {Boolean} Whether requests should be treated as crossorigin
+ * @param scaleMode {Number} See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values
+ * @return {Texture}
+ */
+PIXI.Texture.fromImage = function(imageUrl, crossorigin, scaleMode)
+{
+    var texture = PIXI.TextureCache[imageUrl];
+
+    if(!texture)
+    {
+        texture = new PIXI.Texture(PIXI.BaseTexture.fromImage(imageUrl, crossorigin, scaleMode));
+        PIXI.TextureCache[imageUrl] = texture;
+    }
+
+    return texture;
+};
+
+/**
+ * Helper function that returns a Texture objected based on the given frame id.
+ * If the frame id is not in the texture cache an error will be thrown.
+ *
+ * @static
+ * @method fromFrame
+ * @param frameId {String} The frame id of the texture
+ * @return {Texture}
+ */
+PIXI.Texture.fromFrame = function(frameId)
+{
+    var texture = PIXI.TextureCache[frameId];
+    if(!texture) throw new Error('The frameId "' + frameId + '" does not exist in the texture cache ');
+    return texture;
+};
+
+/**
  * Helper function that creates a new a Texture based on the given canvas element.
  *
  * @static
@@ -7356,6 +7481,35 @@ PIXI.Texture.fromCanvas = function(canvas, scaleMode)
     var baseTexture = PIXI.BaseTexture.fromCanvas(canvas, scaleMode);
 
     return new PIXI.Texture(baseTexture);
+};
+
+/**
+ * Adds a texture to the global PIXI.TextureCache. This cache is shared across the whole PIXI object.
+ *
+ * @static
+ * @method addTextureToCache
+ * @param texture {Texture} The Texture to add to the cache.
+ * @param id {String} The id that the texture will be stored against.
+ */
+PIXI.Texture.addTextureToCache = function(texture, id)
+{
+    PIXI.TextureCache[id] = texture;
+};
+
+/**
+ * Remove a texture from the global PIXI.TextureCache.
+ *
+ * @static
+ * @method removeTextureFromCache
+ * @param id {String} The id of the texture to be removed
+ * @return {Texture} The texture that was removed
+ */
+PIXI.Texture.removeTextureFromCache = function(id)
+{
+    var texture = PIXI.TextureCache[id];
+    delete PIXI.TextureCache[id];
+    delete PIXI.BaseTextureCache[id];
+    return texture;
 };
 
 PIXI.TextureUvs = function()
@@ -7733,7 +7887,6 @@ PIXI.RenderTexture.prototype.getCanvas = function()
 /**
  * This is the base class for creating a PIXI filter. Currently only webGL supports filters.
  * If you want to make a custom filter this should be your base class.
- * 
  * @class AbstractFilter
  * @constructor
  * @param fragmentSrc {Array} The fragment source in an array of strings.
@@ -7745,14 +7898,14 @@ PIXI.AbstractFilter = function(fragmentSrc, uniforms)
     * An array of passes - some filters contain a few steps this array simply stores the steps in a liniear fashion.
     * For example the blur filter has two passes blurX and blurY.
     * @property passes
-    * @type Array
+    * @type Array(Filter)
     * @private
     */
     this.passes = [this];
 
     /**
     * @property shaders
-    * @type Array
+    * @type Array(Shader)
     * @private
     */
     this.shaders = [];
@@ -7771,7 +7924,7 @@ PIXI.AbstractFilter = function(fragmentSrc, uniforms)
 
     /**
     * @property uniforms
-    * @type Object
+    * @type object
     * @private
     */
     this.uniforms = uniforms || {};
@@ -7799,6 +7952,12 @@ PIXI.AbstractFilter.prototype.syncUniforms = function()
     }
 };
 
+/*
+PIXI.AbstractFilter.prototype.apply = function(frameBuffer)
+{
+    // TODO :)
+};
+*/
 /**
  * @author Mat Groves http://matgroves.com/
  */

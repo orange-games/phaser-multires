@@ -98,7 +98,7 @@ Phaser.AnimationParser = {
     * @param {object} json - The JSON data from the Texture Atlas. Must be in Array format.
     * @return {Phaser.FrameData} A FrameData object containing the parsed frames.
     */
-    JSONData: function (game, json) {
+    JSONData: function (game, json, resolution) {
 
         //  Malformed?
         if (!json['frames'])
@@ -123,7 +123,8 @@ Phaser.AnimationParser = {
                 frames[i].frame.y,
                 frames[i].frame.w,
                 frames[i].frame.h,
-                frames[i].filename
+                frames[i].filename,
+                resolution
             ));
 
             if (frames[i].trimmed)
@@ -208,7 +209,7 @@ Phaser.AnimationParser = {
     * @param {object} json - The JSON data from the Texture Atlas. Must be in JSON Hash format.
     * @return {Phaser.FrameData} A FrameData object containing the parsed frames.
     */
-    JSONDataHash: function (game, json) {
+    JSONDataHash: function (game, json, resolution) {
 
         //  Malformed?
         if (!json['frames'])
@@ -234,7 +235,8 @@ Phaser.AnimationParser = {
                 frames[key].frame.y,
                 frames[key].frame.w,
                 frames[key].frame.h,
-                key
+                key,
+                resolution
             ));
 
             if (frames[key].trimmed)

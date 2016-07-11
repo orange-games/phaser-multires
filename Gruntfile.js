@@ -226,7 +226,7 @@ module.exports = function (grunt) {
                 //  3) PIXI
 
                 grunt.log.writeln("-> PIXI");
-                
+
                 if (!excludedKeys['intro'])
                 {
                     tasks.push('concat:pixiIntro');
@@ -235,7 +235,7 @@ module.exports = function (grunt) {
 
                 tasks.push('concat:pixiMain');
                 pixiFilelist.push('<%= modules_dir %>/pixi-main.js');
-                
+
                 //  Optional Rope
                 if (!excludedKeys['rope'])
                 {
@@ -299,7 +299,7 @@ module.exports = function (grunt) {
                 //  3) PIXI
 
                 grunt.log.writeln("-> PIXI");
-                
+
                 if (!excludedKeys['intro'])
                 {
                     tasks.push('concat:pixiIntro');
@@ -308,7 +308,7 @@ module.exports = function (grunt) {
 
                 tasks.push('concat:pixiMain');
                 filelist.push('<%= modules_dir %>/pixi-main.js');
-                
+
                 //  Optional Rope
                 if (!excludedKeys['rope'])
                 {
@@ -407,6 +407,7 @@ module.exports = function (grunt) {
         grunt.task.run('arcadephysics');
         grunt.task.run('nophysics');
         grunt.task.run('minimum');
+        grunt.task.run('tiny');
         grunt.task.run('split');
 
     });
@@ -550,7 +551,17 @@ module.exports = function (grunt) {
         grunt.option('uglify', true);
 
         grunt.task.run('custom');
-
     });
 
+    grunt.registerTask('tiny', 'Phaser without any optional modules', function() {
+
+        grunt.option('exclude', 'gamepad,retrofont,net,debug,arcade,ninja,p2,tilemaps,particles,creature,video,rope,tilesprite');
+        grunt.option('filename', 'phaser-tiny');
+        grunt.option('sourcemap', true);
+        grunt.option('copy', false);
+        grunt.option('copycustom', true);
+        grunt.option('uglify', true);
+
+        grunt.task.run('custom');
+    });
 };
